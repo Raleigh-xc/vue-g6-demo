@@ -6,8 +6,8 @@
 export default {
   props: {
     data: {
-      type: Object,
-      default: () => ({})
+      type: Array,
+      default: () => []
     }
   },
 
@@ -20,7 +20,7 @@ export default {
         height: parseInt(container.height),
         width: parseInt(container.width),
         modes: {
-          default: ["drag-canvas", "zoom-canvas", "drag-node"]
+          default: ["drag-canvas", "zoom-canvas", "drag-node","add-edge"]
         },
 
         fitView: true,
@@ -28,7 +28,7 @@ export default {
 
         defaultNode: {
           // size: 30, // 节点大小
-          type: "rect",
+          type: "process-node",
           size: [120, 30],
           // ...                 // 节点的其他配置
           // 节点样式配置
@@ -44,14 +44,14 @@ export default {
               fill: "#fff" // 节点标签文字颜色
             }
           },
-          linkPoints: {
-            top: true,
-            bottom: true,
-            left: true,
-            right: true,
-            size: 5,
-            fill: "#fff"
-          }
+          // linkPoints: {
+          //   top: true,
+          //   bottom: true,
+          //   left: true,
+          //   right: true,
+          //   size: 5,
+          //   fill: "#fff"
+          // }
         },
         // 边在默认状态下的样式配置（style）和其他配置
         defaultEdge: {

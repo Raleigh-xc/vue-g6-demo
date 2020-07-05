@@ -12,6 +12,8 @@ import Graph from "./widgets/graph/graph";
 // import ToolBar from './widgets/toolbar/toolbar'
 
 import Command from './command'
+import registerBehavior from './behavior'
+import registerShape from './shape'
 
 export default {
   name: "G6Process",
@@ -27,8 +29,8 @@ export default {
       default: () => []
     },
     data: {
-      type: Object,
-      default: () => ({})
+      type: Array,
+      default: () => []
     }
   },
 
@@ -40,6 +42,8 @@ export default {
   },
 
   mounted() {
+    registerBehavior(G6);
+    registerShape(G6)
     this.initGraph();
   },
 
