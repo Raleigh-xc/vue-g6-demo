@@ -1,6 +1,6 @@
 export default function (G6) {
   G6.registerBehavior('add-edge', {
-    getEvents () {
+    getEvents() {
       return {
         'node:mousedown': 'onMouseDown',
         'mousemove': 'onMouseMove',
@@ -8,15 +8,16 @@ export default function (G6) {
       };
     },
 
-    onMouseDown (evt) {
+    onMouseDown(evt) {
+
       const self = this;
       const graph = self.graph;
 
-      const node = evt.item.getModel().id;
-      const nodeAnchor = evt.target.attrs._pointIndex
       const shapeName = evt.target.cfg.name
 
       if (shapeName === 'link-point') {
+        const node = evt.item.getModel().id;
+        const nodeAnchor = evt.target.attrs._pointIndex
         self._addingEdge = true
         self._edge = graph.add('edge', {
           id: `node_${Date.now()}`,
@@ -26,19 +27,19 @@ export default function (G6) {
           style: {
             stroke: '#5b8ff9',
             lineWidth: 1,
+            lineAppendWidth: 5,
             endArrow: true
           },
-          stateStyles:{
+          stateStyles: {
             selected: {
-              stroke: '#aaa',
-              lineWidth: 2,
+              stroke: '#999',
             }
           }
         });
       }
     },
 
-    onMouseMove (evt) {
+    onMouseMove(evt) {
       const self = this;
       const graph = self.graph;
       const point = { x: evt.x, y: evt.y };
@@ -49,15 +50,20 @@ export default function (G6) {
       }
     },
 
-    onMouseUp (evt) {
+    onMouseUp(evt) {
+
       const self = this;
       const graph = self.graph;
 
-      const node = evt.item.getModel().id;
-      const nodeAnchor = evt.target.attrs._pointIndex
+      console.log(evt)
+      console.log(evt.target)
+      console.log(evt.target.cfg)
+
       const shapeName = evt.target.cfg.name
 
       if (shapeName === 'link-point' && self._addingEdge && self._edge) {
+        const node = evt.item.getModel().id;
+        const nodeAnchor = evt.target.attrs._pointIndex
         graph.updateItem(self._edge, {
           target: node,
           targetAnchor: nodeAnchor

@@ -1,27 +1,34 @@
-export default function(G6){
+export default function (G6) {
   G6.registerBehavior('click-edge', {
     getEvents() {
       return {
-        'edge:click': 'onEdgeClick',
-        'canvas:click': 'onCanvasClick'
+        'edge:click': 'onEdgeClick'
       }
     },
+
     onEdgeClick(evt) {
 
-      const self = this;
-      const graph = self.graph;
-
-      console.log(11111111111111)
-
+      // const self = this;
+      // const graph = self.graph;
       // this._clearSelected();
-      graph.setItemState(evt.item, 'selected', true);
+      // graph.setItemState(evt.item, 'selected', true);
       // let selectedItems = this.graph.get('selectedItems');
       // if(!selectedItems)
       //   selectedItems = [];
       // selectedItems = [e.item.get('id')];
       // this.graph.set('selectedItems',selectedItems);
       // this.graph.emit('afteritemselected',selectedItems);
+
+      const edge = evt.item
+      edge.setState('selected', !edge.hasState('selected'))
     },
+
+    // onCanvasClick(evt) {
+    //   const self = this;
+    //   const graph = self.graph;
+    //   console.log(graph)
+    //   console.log(evt)
+    // }
     // onNodeMouseOver(e){
     //   if(this.graph.getCurrentMode() === 'edit')
     //     this.graph.setItemState(e.item, 'hover', true);

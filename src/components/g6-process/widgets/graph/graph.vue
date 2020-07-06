@@ -26,7 +26,7 @@ export default {
             "drag-node",
             "add-edge",
             "delete-edge",
-            "click-edge"
+            "click-edge",'click-select'
           ]
         },
 

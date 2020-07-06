@@ -1,11 +1,25 @@
 export default function (G6) {
   G6.registerNode('process-node', {
 
-    afterDraw (cfg, group) {
+    options: {
+      style: {
+        fill: 'red',
+        stroke: '#5b8ff9',
+        lineWidth: '1'
+      },
+      stateStyles: {
+        hover: {},
+        selected: {
+          stroke: '#999',
+        },
+      },
+    },
+
+    afterDraw(cfg, group) {
       this.drawAnchor(cfg, group)
     },
 
-    drawAnchor (cfg, group) {
+    drawAnchor(cfg, group) {
       const size = cfg.size;
       const width = size[0];
       const height = size[1];
@@ -14,7 +28,7 @@ export default function (G6) {
         attrs: {
           x: 0 - width / 2,
           y: 0,
-          r: 8,
+          r: 5,
           fill: '#fff',
           stroke: '#5b8ff9',
           _point: [0, 0.5],
@@ -27,7 +41,7 @@ export default function (G6) {
         attrs: {
           x: 0,
           y: 0 - height / 2,
-          r: 8,
+          r: 5,
           fill: '#fff',
           stroke: '#5b8ff9',
           _point: [0.5, 0],
@@ -40,7 +54,7 @@ export default function (G6) {
         attrs: {
           x: 0 + width / 2,
           y: 0,
-          r: 8,
+          r: 5,
           fill: '#fff',
           stroke: '#5b8ff9',
           _point: [1, 0.5],
@@ -53,7 +67,7 @@ export default function (G6) {
         attrs: {
           x: 0,
           y: 0 + height / 2,
-          r: 8,
+          r: 5,
           fill: '#fff',
           stroke: '#5b8ff9',
           _point: [0.5, 1],
@@ -63,7 +77,7 @@ export default function (G6) {
       });
     },
 
-    getAnchorPoints () {
+    getAnchorPoints() {
       return [
         [0, 0.5], // 左侧中间
         [0.5, 0],
@@ -71,6 +85,10 @@ export default function (G6) {
         [0.5, 1]
       ];
     },
+
+    // setState(name, value, node) {
+    //   node.setState(name, value)
+    // },
 
   }, 'rect')
 }

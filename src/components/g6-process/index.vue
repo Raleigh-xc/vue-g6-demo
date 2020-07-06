@@ -2,6 +2,7 @@
   <div class="g6-process-container">
     <panel :elements="elements" />
     <graph ref="graph" :data="data" />
+    <tool-bar />
   </div>
 </template>
 
@@ -9,7 +10,7 @@
 import G6 from "@antv/g6";
 import Panel from "./widgets/panel/panel";
 import Graph from "./widgets/graph/graph";
-// import ToolBar from './widgets/toolbar/toolbar'
+import ToolBar from "./widgets/toolbar/toolbar";
 
 import Command from './command'
 import registerBehavior from './behavior'
@@ -19,8 +20,8 @@ export default {
   name: "G6Process",
   components: {
     Panel,
-    Graph
-    // ToolBar
+    Graph,
+    ToolBar
   },
 
   props: {
