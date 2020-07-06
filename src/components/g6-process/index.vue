@@ -49,8 +49,11 @@ export default {
 
   methods: {
     initGraph() {
-      this.graph = this.$refs.graph.initGraph(G6);
+      this.graph = this.$refs.graph.drawGraph(G6);
       this.command = new Command(this.graph)
+
+      // console.log(this.graph)
+      // this.graph._command = this.command
     }
   }
 };

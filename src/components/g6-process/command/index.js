@@ -5,8 +5,12 @@ class Command {
     this.graph = graph
   }
 
-  addNode(model) {
+  addNode (model) {
     this.graph.add('node', model)
+  }
+
+  addEdge (model) {
+    this.graph.add('edge', model)
   }
 }
 

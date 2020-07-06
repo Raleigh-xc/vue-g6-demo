@@ -31,18 +31,18 @@ export default {
 
     handleDragEnd(evt, element) {
       console.log(element);
-      const { graph, command } = this.$parent;
+      const { graph } = this.$parent;
       if (!graph) {
         return;
       }
       const position = graph.getPointByClient(evt.x, evt.y);
-      command.addNode({
-        id: Date.now(),
+      graph.add("node", {
+        id: `${Date.now()}`,
         x: position.x,
         y: position.y,
-        // type: "rect",
+        type: "process-node",
         label: element.title,
-        // size: [120, 30]
+        size: [160, 40]
       });
     }
   }

@@ -1,47 +1,71 @@
 export default function (G6) {
   G6.registerBehavior('add-edge', {
-    getDefaultCfg () {
-      // return {
-      //   multiple: true
-      // };
-    },
     getEvents () {
       return {
         'node:mousedown': 'onMouseDown',
-        // 'canvas:click': 'onCanvasClick'
+        'mousemove': 'onMouseMove',
+        'node:mouseup': 'onMouseUp'
       };
     },
 
-    onMouseDown(e){
-      const graph = this.graph;
-      const item = e.item;
-      console.log(graph)
-      console.log(item)
+    onMouseDown (evt) {
+      const self = this;
+      const graph = self.graph;
+
+      const node = evt.item.getModel().id;
+      const nodeAnchor = evt.target.attrs._pointIndex
+      const shapeName = evt.target.cfg.name
+
+      if (shapeName === 'link-point') {
+        self._addingEdge = true
+        self._edge = graph.add('edge', {
+          id: `node_${Date.now()}`,
+          source: node,
+          sourceAnchor: nodeAnchor,
+          target: node,
+          style: {
+            stroke: '#5b8ff9',
+            lineWidth: 1,
+            endArrow: true
+          },
+          stateStyles:{
+            selected: {
+              stroke: '#aaa',
+              lineWidth: 2,
+            }
+          }
+        });
+      }
+    },
+
+    onMouseMove (evt) {
+      const self = this;
+      const graph = self.graph;
+      const point = { x: evt.x, y: evt.y };
+      if (self._addingEdge && self._edge) {
+        graph.updateItem(self._edge, {
+          target: point
+        });
+      }
+    },
+
+    onMouseUp (evt) {
+      const self = this;
+      const graph = self.graph;
+
+      const node = evt.item.getModel().id;
+      const nodeAnchor = evt.target.attrs._pointIndex
+      const shapeName = evt.target.cfg.name
+
+      if (shapeName === 'link-point' && self._addingEdge && self._edge) {
+        graph.updateItem(self._edge, {
+          target: node,
+          targetAnchor: nodeAnchor
+        });
+        self._addingEdge = false
+        self._edge = null
+      }
     }
-    // onNodeClick(e) {
-    //   const graph = this.graph;
-    //   const item = e.item;
-    //   if (item.hasState('active')) {
-    //     graph.setItemState(item, 'active', false);
-    //     return;
-    //   }
-    //   // this 上即可取到配置，如果不允许多个 'active'，先取消其他节点的 'active' 状态
-    //   if (!this.multiple) {
-    //     this.removeNodesState();
-    //   }
-    //   // 置点击的节点状态 'active' 为 true
-    //   graph.setItemState(item, 'active', true);
-    // },
-    // onCanvasClick(e) {
-    //   // shouldUpdate 可以由用户复写，返回 true 时取消所有节点的 'active' 状态，即将 'active' 状态置为 false
-    //   if (this.shouldUpdate(e)) {
-    //     removeNodesState();
-    //   }
-    // },
-    // removeNodesState() {
-    //   graph.findAllByState('node', 'active').forEach(node => {
-    //       graph.setItemState(node, 'active', false);
-    //     });
-    // }  
+
   });
 }
