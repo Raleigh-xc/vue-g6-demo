@@ -37,12 +37,38 @@ export default {
       }
       const position = graph.getPointByClient(evt.x, evt.y);
       graph.add("node", {
-        id: `${Date.now()}`,
+        id: `node_${Date.now()}`,
         x: position.x,
         y: position.y,
         type: "process-node",
         label: element.title,
-        size: [160, 40]
+        size: [160, 40],
+        style: {
+          radius: 5,
+          stroke: "#ccc",
+          fill: "#fff",
+          lineWidth: 2
+        },
+        stateStyles: {
+          selected: {
+            stroke: "#1890ff",
+            "link-point": {
+              stroke: "#1890ff"
+            }
+          },
+          hover: {
+            stroke: "#1890ff"
+            // "link-point": {
+            //   stroke: "#999"
+            // }
+          }
+        },
+        labelCfg: {
+          style: {
+            fill: "#666",
+            fontSize: 18
+          }
+        }
       });
     }
   }

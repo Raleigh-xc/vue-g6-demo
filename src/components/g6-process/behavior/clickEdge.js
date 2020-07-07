@@ -20,6 +20,7 @@ export default function (G6) {
       // this.graph.emit('afteritemselected',selectedItems);
 
       const edge = evt.item
+      console.log('node',edge)
       edge.setState('selected', !edge.hasState('selected'))
     },
 

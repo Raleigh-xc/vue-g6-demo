@@ -22,3 +22,11 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+
+### 功能点
+- 添加节点
+- 添加边
+- 点击选中节点
+- 点击选中边
+- toolbar 删除所有选中

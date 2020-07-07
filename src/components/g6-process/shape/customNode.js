@@ -1,9 +1,10 @@
 export default function (G6) {
-  G6.registerNode('process-node', {
+  const name = 'custom-node'
+  G6.registerNode(name, {
 
     // options: {
     //   style: {
-    //     stroke: '#ccc',
+    //     stroke: '#5b8ff9',
     //     lineWidth: 1,
     //     lineAppendWidth: 5,
     //     endArrow: true
@@ -18,11 +19,29 @@ export default function (G6) {
     //   }
     // },
 
-    afterDraw (cfg, group) {
-      this._drawAnchor(cfg, group)
+    draw(cfg,group){
+      console.log(cfg)
+      const keyShape = group.addShape('rect', {
+        attrs: {
+          x: 0 -  100 / 2,
+          y: 0,
+          r: 5,
+          fill: '#fff',
+          stroke: '#5b8ff9',
+          _point: [0, 0.5],
+          _pointIndex: 0
+        },
+        name: name + '-keyShape'
+      });
+
+      return keyShape
     },
 
-    _drawAnchor (cfg, group) {
+    afterDraw(cfg, group) {
+      this.drawAnchor(cfg, group)
+    },
+
+    drawAnchor(cfg, group) {
       const size = cfg.size;
       const width = size[0];
       const height = size[1];
@@ -33,7 +52,9 @@ export default function (G6) {
           y: 0,
           r: 5,
           fill: '#fff',
-          stroke: '#ccc',
+          stroke: '#5b8ff9',
+          opacity: 0,
+          fillOpacity: 0,
           _point: [0, 0.5],
           _pointIndex: 0
         },
@@ -47,12 +68,13 @@ export default function (G6) {
           y: 0 - height / 2,
           r: 5,
           fill: '#fff',
-          stroke: '#ccc',
+          stroke: '#5b8ff9',
+          opacity: 1,
+          fillOpacity: 1,
           _point: [0.5, 0],
           _pointIndex: 1
         },
-        name: 'link-point',
-        visible: false,
+        name: 'link-point'
       });
 
       group.addShape('circle', {
@@ -61,12 +83,11 @@ export default function (G6) {
           y: 0,
           r: 5,
           fill: '#fff',
-          stroke: '#ccc',
+          stroke: '#5b8ff9',
           _point: [1, 0.5],
           _pointIndex: 2
         },
-        name: 'link-point',
-        visible: false,
+        name: 'link-point'
       });
 
       group.addShape('circle', {
@@ -75,16 +96,15 @@ export default function (G6) {
           y: 0 + height / 2,
           r: 5,
           fill: '#fff',
-          stroke: '#ccc',
+          stroke: '#5b8ff9',
           _point: [0.5, 1],
           _pointIndex: 3
         },
-        name: 'link-point',
-        visible: false,
+        name: 'link-point'
       });
     },
 
-    getAnchorPoints () {
+    getAnchorPoints() {
       return [
         [0, 0.5], // 左侧中间
         [0.5, 0],
@@ -93,43 +113,14 @@ export default function (G6) {
       ];
     },
 
-    _select (shapes) {
-      shapes.forEach(shape => {
-        console.log(shape)
-        console.log(shape.getType())
-        console.log(shape.isVisible())
-        // const model = shape.getModel()
-        // console.log(model)
-      });
-    },
-    // _unselect (shapes) {
-
+    // setState(name, value, node) {
+    //   console.log('node',node)
+    //   console.log(node.getKeyShape())
+    //   // node.getKeyShape().setState(name, value)
+    //   console.log(name)
+    //   console.log(value)
+    //   console.log(node)
     // },
 
-    setState (name, value, item) {
-      console.log('node', item)
-      // console.log(node.getKeyShape())
-      // node.getKeyShape().setState(name, value)
-
-      const group = item.getContainer();
-      const shapes = group.get('children');
-      // console.log('shape',shapes)
-      switch (name) {
-        case 'selected':
-        case 'hover':
-          if (value) {
-            this._select(shapes)
-          } else {
-            // this._unselect(shapes)
-            console.log(shapes)
-          }
-          break
-      }
-
-      // console.log(name)
-      // console.log(value)
-      // console.log(item)
-    },
-
-  }, 'rect')
+  })
 }

@@ -1,6 +1,12 @@
 <template>
   <div class="toolbar">
-    <div class="item" v-for="edit in edits" :key="edit.code" :title="edit.name"></div>
+    <div
+      class="action"
+      v-for="action in actions"
+      :key="action.code"
+      :title="action.name"
+      @click="handleAction(action)"
+    ></div>
   </div>
 </template>
 
@@ -9,7 +15,7 @@ export default {
   name: "Toolbar",
   data() {
     return {
-      edits: [
+      actions: [
         {
           code: "UNDO",
           name: "undo"
@@ -36,12 +42,50 @@ export default {
         }
       ]
     };
+  },
+  methods: {
+    handleAction(action) {
+      console.log(action);
+      switch (action.code) {
+        case "DELETE":
+          this.handleDelete();
+          break;
+      }
+    },
+
+    handleDelete() {
+      const { graph } = this.$parent;
+      if (!graph) {
+        return;
+      }
+
+      const nodes = graph.findAllByState("node", "selected");
+      console.log(nodes);
+
+      // 删除选中对的节点
+      nodes.forEach(node => {
+        graph.removeItem(node);
+        // 删除节点相关的边 
+        const edges = node.getEdges();
+        edges.forEach(edge => {
+          graph.removeItem(edge);
+        });
+      });
+
+      const edges = graph.findAllByState("edge", "selected");
+      console.log(edges);
+
+      // 删除选中对的边
+      edges.forEach(edge => {
+        graph.removeItem(edge);
+      });
+    }
   }
 };
 </script>
 
 <style scoped>
-.toolbar{
+.toolbar {
   position: absolute;
   top: 20px;
   height: 40px;
@@ -56,7 +100,7 @@ export default {
   align-items: center;
 }
 
-.item{
+.action {
   width: 20px;
   height: 20px;
   cursor: pointer;
@@ -64,7 +108,7 @@ export default {
   margin-right: 30px;
 }
 
-.item:first-child{
+.action:first-child {
   margin-left: 30px;
 }
 </style>
