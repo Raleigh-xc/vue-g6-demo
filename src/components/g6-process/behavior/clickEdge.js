@@ -2,62 +2,28 @@ export default function (G6) {
   G6.registerBehavior('click-edge', {
     getEvents() {
       return {
-        'edge:click': 'onEdgeClick'
+        'edge:click': 'onEdgeClick',
+        'canvas:click': 'onCanvasClick'
       }
     },
 
     onEdgeClick(evt) {
-
-      // const self = this;
-      // const graph = self.graph;
-      // this._clearSelected();
-      // graph.setItemState(evt.item, 'selected', true);
-      // let selectedItems = this.graph.get('selectedItems');
-      // if(!selectedItems)
-      //   selectedItems = [];
-      // selectedItems = [e.item.get('id')];
-      // this.graph.set('selectedItems',selectedItems);
-      // this.graph.emit('afteritemselected',selectedItems);
-
+      const self = this;
+      const graph = self.graph;
       const edge = evt.item
-      console.log('node',edge)
-      edge.setState('selected', !edge.hasState('selected'))
+      graph.setItemState(edge, 'selected', !edge.hasState('selected'))
     },
 
-    // onCanvasClick(evt) {
-    //   const self = this;
-    //   const graph = self.graph;
-    //   console.log(graph)
-    //   console.log(evt)
-    // }
-    // onNodeMouseOver(e){
-    //   if(this.graph.getCurrentMode() === 'edit')
-    //     this.graph.setItemState(e.item, 'hover', true);
-    //   else
-    //     this.graph.setItemState(e.item, 'hover', false);
-    // },
-    // onEdgeMouseOver(e){
-    //   if(this.graph.getCurrentMode() === 'edit' && !e.item.hasState('selected'))
-    //     this.graph.setItemState(e.item, 'hover', true);
-    // },
-    // onEdgeMouseLeave(e){
-    //   if(this.graph.getCurrentMode() === 'edit' && !e.item.hasState('selected'))
-    //     this.graph.setItemState(e.item, 'hover', false);
-    // },
-    // onCanvasClick(){
-    //   this._clearSelected();
-    // },
-    // _clearSelected(){
-    //   let selected = this.graph.findAllByState('node', 'selected');
-    //   selected.forEach(node => {
-    //     this.graph.setItemState(node, 'selected', false);
-    //   });
-    //   selected = this.graph.findAllByState('edge', 'selected');
-    //   selected.forEach(edge => {
-    //     this.graph.setItemState(edge, 'selected', false);
-    //   });
-    //   this.graph.set('selectedItems',[]);
-    //   this.graph.emit('afteritemselected',[]);
-    // }
+    onCanvasClick(){
+      const self = this;
+      const graph = self.graph;
+      const edges = graph.findAllByState("edge", "selected");
+
+      // 清除选中状态
+      edges.forEach(edge => {
+        graph.setItemState(edge, 'selected', false)
+      });
+    }
+    
   });
 }

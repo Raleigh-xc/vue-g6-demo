@@ -12,7 +12,6 @@ import Panel from "./widgets/panel/panel";
 import Graph from "./widgets/graph/graph";
 import ToolBar from "./widgets/toolbar/toolbar";
 
-import Command from './command'
 import registerBehavior from './behavior'
 import registerShape from './shape'
 
@@ -51,7 +50,7 @@ export default {
   methods: {
     initGraph() {
       this.graph = this.$refs.graph.drawGraph(G6);
-      this.command = new Command(this.graph)
+      // this.command = new Command(this.graph)
 
       // console.log(this.graph)
       // this.graph._command = this.command

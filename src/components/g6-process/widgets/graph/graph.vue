@@ -26,7 +26,10 @@ export default {
             "drag-node",
             "add-edge",
             "delete-edge",
-            "click-edge",'click-select'
+            "click-edge",
+            'click-select',
+            'hover-node',
+            // 'hover-edge'
           ]
         },
 

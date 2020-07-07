@@ -47,20 +47,38 @@ export default {
           radius: 5,
           stroke: "#ccc",
           fill: "#fff",
-          lineWidth: 2
+          lineWidth: 1
         },
         stateStyles: {
           selected: {
-            stroke: "#1890ff",
-            "link-point": {
-              stroke: "#1890ff"
+            stroke: "#5b8ff9",
+            "anchor-0": {
+              opacity: 1
+            },
+            "anchor-1": {
+              opacity: 1
+            },
+            "anchor-2": {
+              opacity: 1
+            },
+            "anchor-3": {
+              opacity: 1
             }
           },
           hover: {
-            stroke: "#1890ff"
-            // "link-point": {
-            //   stroke: "#999"
-            // }
+            stroke: "#5b8ff9",
+            "anchor-0": {
+              opacity: 1
+            },
+            "anchor-1": {
+              opacity: 1
+            },
+            "anchor-2": {
+              opacity: 1
+            },
+            "anchor-3": {
+              opacity: 1
+            }
           }
         },
         labelCfg: {
