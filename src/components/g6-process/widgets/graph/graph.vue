@@ -6,14 +6,33 @@
 export default {
   props: {
     data: {
-      type: Array,
-      default: () => []
+      type: String,
+      default: ""
+    }
+  },
+
+  data() {
+    return {
+      graph: null
+    };
+  },
+
+  watch: {
+    data(value) {
+      if (this.graph) {
+        let data = value ? JSON.parse(value) : {};
+        this.graph.read(data);
+      }
     }
   },
 
   methods: {
     drawGraph(G6) {
       const grid = new G6.Grid();
+      const minimap = new G6.Minimap({
+        size: [150, 100]
+      });
+
       const container = window.getComputedStyle(this.$refs["graph"]);
       const graph = new G6.Graph({
         container: this.$refs["graph"],
@@ -24,58 +43,97 @@ export default {
             "drag-canvas",
             "zoom-canvas",
             "drag-node",
+            "click-select",
+
             "add-edge",
-            "delete-edge",
             "click-edge",
-            'click-select',
-            'hover-node',
-            // 'hover-edge'
+            "hover-node",
+            "context-menu"
           ]
+        },
+
+        defaultNode: {
+          type: "base-node",
+          size: [160, 40],
+          style: {
+            radius: 5,
+            stroke: "#ccc",
+            fill: "#fff",
+            lineWidth: 2
+          },
+          labelCfg: {
+            style: {
+              fill: "#666",
+              fontSize: 18
+            }
+          }
+        },
+
+        nodeStateStyles: {
+          selected: {
+            stroke: "#5b8ff9",
+            "anchor-0": {
+              opacity: 1
+            },
+            "anchor-1": {
+              opacity: 1
+            },
+            "anchor-2": {
+              opacity: 1
+            },
+            "anchor-3": {
+              opacity: 1
+            }
+          },
+          hover: {
+            stroke: "#5b8ff9",
+            "anchor-0": {
+              opacity: 1
+            },
+            "anchor-1": {
+              opacity: 1
+            },
+            "anchor-2": {
+              opacity: 1
+            },
+            "anchor-3": {
+              opacity: 1
+            }
+          }
+        },
+
+        defaultEdge: {
+          style: {
+            stroke: "#ccc",
+            lineWidth: 2,
+            lineAppendWidth: 10,
+            endArrow: true
+          }
+        },
+
+        edgeStateStyles: {
+          selected: {
+            stroke: "#5b8ff9"
+          },
+          hover: {
+            stroke: "#5b8ff9"
+          },
+          adding: {
+            lineDash: [10, 5]
+          }
         },
 
         fitView: true,
         fitViewPadding: 50,
-        plugins: [grid]
+        plugins: [grid, minimap]
       });
 
-      graph.data(this.data); // 读取 Step 2 中的数据源到图上
-      graph.render(); // 渲染图
+      let data = this.data ? JSON.parse(this.data) : {};
 
-      // 监听鼠标进入节点
-      // graph.on("node:mouseenter", e => {
-      //   const nodeItem = e.item;
-      //   // 设置目标节点的 hover 状态 为 true
-      //   graph.setItemState(nodeItem, "hover", true);
-      // });
-      // // 监听鼠标离开节点
-      // graph.on("node:mouseleave", e => {
-      //   const nodeItem = e.item;
-      //   // 设置目标节点的 hover 状态 false
-      //   graph.setItemState(nodeItem, "hover", false);
-      // });
-      // // 监听鼠标点击节点
-      // graph.on("node:click", e => {
-      //   // 先将所有当前有 click 状态的节点的 click 状态置为 false
-      //   const clickNodes = graph.findAllByState("node", "click");
-      //   clickNodes.forEach(cn => {
-      //     graph.setItemState(cn, "click", false);
-      //   });
-      //   const nodeItem = e.item;
-      //   // 设置目标节点的 click 状态 为 true
-      //   graph.setItemState(nodeItem, "click", true);
-      // });
-      // // 监听鼠标点击节点
-      // graph.on("edge:click", e => {
-      //   // 先将所有当前有 click 状态的边的 click 状态置为 false
-      //   const clickEdges = graph.findAllByState("edge", "click");
-      //   clickEdges.forEach(ce => {
-      //     graph.setItemState(ce, "click", false);
-      //   });
-      //   const edgeItem = e.item;
-      //   // 设置目标边的 click 状态 为 true
-      //   graph.setItemState(edgeItem, "click", true);
-      // });
+      graph.data(data);
+      graph.render();
 
+      this.graph = graph;
       return graph;
     }
   }
@@ -89,4 +147,13 @@ export default {
   position: relative;
   overflow: hidden;
 }
+
+.graph /deep/ .g6-minimap {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+  background: #fff;
+}
 </style>
+

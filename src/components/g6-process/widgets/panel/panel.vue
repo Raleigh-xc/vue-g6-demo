@@ -36,57 +36,14 @@ export default {
         return;
       }
       const position = graph.getPointByClient(evt.x, evt.y);
+      const id = `${Date.now()}`;
       graph.add("node", {
-        id: `node_${Date.now()}`,
+        id,
         x: position.x,
         y: position.y,
-        type: "process-node",
-        label: element.title,
-        size: [160, 40],
-        style: {
-          radius: 5,
-          stroke: "#ccc",
-          fill: "#fff",
-          lineWidth: 1
-        },
-        stateStyles: {
-          selected: {
-            stroke: "#5b8ff9",
-            "anchor-0": {
-              opacity: 1
-            },
-            "anchor-1": {
-              opacity: 1
-            },
-            "anchor-2": {
-              opacity: 1
-            },
-            "anchor-3": {
-              opacity: 1
-            }
-          },
-          hover: {
-            stroke: "#5b8ff9",
-            "anchor-0": {
-              opacity: 1
-            },
-            "anchor-1": {
-              opacity: 1
-            },
-            "anchor-2": {
-              opacity: 1
-            },
-            "anchor-3": {
-              opacity: 1
-            }
-          }
-        },
-        labelCfg: {
-          style: {
-            fill: "#666",
-            fontSize: 18
-          }
-        }
+        label: element.name || element.code || element.title,
+        _originId: element.id,
+        _timeStamp: id
       });
     }
   }
@@ -99,13 +56,15 @@ export default {
   top: 0;
   left: 0;
   height: 100%;
-  width: 10%;
+  width: 200px;
   /* box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1); */
   /* padding: 5px 0; */
-  line-height: 36px;
-  background: #eee;
-  color: #333;
+  line-height: 40px;
+  background: #f7f9fb;
+  color: #666;
+  font-size: 14x;
   overflow: hidden;
+  padding-top: 50px;
 }
 
 .element {

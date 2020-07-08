@@ -1,5 +1,5 @@
 export default function (G6) {
-  G6.registerNode('process-node', {
+  G6.registerNode('base-node', {
 
     afterDraw(cfg, group) {
       this._drawAnchor(cfg, group)

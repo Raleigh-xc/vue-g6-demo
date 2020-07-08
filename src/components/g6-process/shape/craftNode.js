@@ -1,11 +1,42 @@
 export default function (G6) {
-  G6.registerNode('process-node', {
+  const name = 'craft-node'
+  G6.registerNode(name, {
 
-    afterDraw(cfg, group) {
+    draw (cfg, group) {
+      const keyShape = this._drawKeyShape(cfg, group)
+      this._drawAnchor(cfg, group)
+
+      return keyShape
+    },
+
+    afterDraw (cfg, group) {
       this._drawAnchor(cfg, group)
     },
 
-    _drawAnchor(cfg, group) {
+    _drawKeyShape (cfg, group) {
+
+      const size = cfg.size;
+      const width = size[0];
+      const height = size[1];
+
+      console.log(width)
+      console.log(height)
+      console.log(cfg)
+
+      const keyShape = group.addShape('rect', {
+        attrs: {
+          x: 0, // 必须配置
+          y: 0, // 必须配置
+          fill: 'red',
+          stroke: 'red',
+        },
+        name: `${name}-keyShape`
+      });
+
+      return keyShape;
+    },
+
+    _drawAnchor (cfg, group) {
       const size = cfg.size;
       const width = size[0];
       const height = size[1];
@@ -67,7 +98,7 @@ export default function (G6) {
       });
     },
 
-    getAnchorPoints() {
+    getAnchorPoints () {
       return [
         [0, 0.5], // 左侧中间
         [0.5, 0],
