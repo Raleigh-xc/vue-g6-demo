@@ -2,7 +2,7 @@
   <div class="g6-process-container">
     <panel :elements="elements" />
     <graph ref="graph" :data="data" />
-    <tool-bar @save="handleSave" />
+    <tool-bar @edit="handleEdit" @save="handleSave" />
     <context-menu @edit="handleEdit" />
   </div>
 </template>

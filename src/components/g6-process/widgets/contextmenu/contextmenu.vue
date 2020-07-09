@@ -7,8 +7,17 @@
 
 <script>
 // import cloneDeep from "lodash.clonedeep";
+// import state from '../../store'
+
 export default {
   name: "ContextMenu",
+
+  data(){
+    return {
+      // message: state.message
+    }
+  },
+
   methods: {
     handleEdit() {
       const { graph } = this.$parent;

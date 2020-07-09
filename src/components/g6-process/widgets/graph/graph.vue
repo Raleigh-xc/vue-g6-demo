@@ -3,6 +3,8 @@
 </template>
 
 <script>
+import store from "../../store";
+
 export default {
   props: {
     data: {
@@ -123,8 +125,6 @@ export default {
           }
         },
 
-        fitView: true,
-        fitViewPadding: 50,
         plugins: [grid, minimap]
       });
 
@@ -134,6 +134,8 @@ export default {
       graph.render();
 
       this.graph = graph;
+      store.initGraph(graph)
+
       return graph;
     }
   }
@@ -146,6 +148,7 @@ export default {
   width: 100%;
   position: relative;
   overflow: hidden;
+  z-index: 1;
 }
 
 .graph /deep/ .g6-minimap {

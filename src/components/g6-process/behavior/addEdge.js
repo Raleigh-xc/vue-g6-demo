@@ -88,6 +88,12 @@ export default function (G6) {
         });
         self._addingEdge = false
         self._edge = null
+
+        let _doStack = graph.get('_doStack')
+        _doStack.push(graph.save())
+        graph.set('_doStack',_doStack)
+        graph.set('_doStackIndex',_doStack.length - 1)
+
       } else if (self._edge) {
         graph.removeItem(self._edge);
         self._addingEdge = false

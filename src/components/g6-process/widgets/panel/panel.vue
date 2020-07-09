@@ -7,11 +7,13 @@
       draggable
       @dragstart="handleDragStart(element)"
       @dragend="handleDragEnd($event,element)"
-    >{{element.title}}</div>
+    >{{element.name || element.code || element.title}}</div>
   </div>
 </template>
 
 <script>
+import store from "../../store";
+
 export default {
   name: "Panel",
   props: {
@@ -22,29 +24,39 @@ export default {
   },
 
   methods: {
-    handleDragStart(element) {
-      console.log(element);
-      // this._element = element;
-      // const {graph} = this.$parent
-      // graph.set('dragElement',true)
+    handleDragStart(item) {
+      console.log(item);
     },
 
-    handleDragEnd(evt, element) {
-      console.log(element);
-      const { graph } = this.$parent;
-      if (!graph) {
-        return;
-      }
+    handleDragEnd(evt, item) {
+      const { graph } = store.state;
+
       const position = graph.getPointByClient(evt.x, evt.y);
       const id = `${Date.now()}`;
-      graph.add("node", {
+      const node = {
         id,
         x: position.x,
         y: position.y,
-        label: element.name || element.code || element.title,
-        _originId: element.id,
+        label: item.name || item.code || item.title,
+        _originId: item.id,
         _timeStamp: id
-      });
+      }
+      store.addNode(node)
+
+
+      // graph.add("node", {
+      //   id,
+      //   x: position.x,
+      //   y: position.y,
+      //   label: item.name || item.code || item.title,
+      //   _originId: item.id,
+      //   _timeStamp: id
+      // });
+
+      // let _doStack = graph.get('_doStack')
+      // _doStack.push(graph.save())
+      // graph.set('_doStack',_doStack)
+      // graph.set('_doStackIndex',_doStack.length - 1)
     }
   }
 };

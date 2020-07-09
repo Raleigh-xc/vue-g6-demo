@@ -1,6 +1,8 @@
 <template>
   <div id="app">
-    <g6-process :elements="elements" :data="data" @edit="handleEdit" @save="handleSave"/>
+    <div class="g6-box">
+      <g6-process :elements="elements" :data="data" @edit="handleEdit" @save="handleSave"/>
+    </div>
   </div>
 </template>
 
@@ -45,9 +47,11 @@ export default {
 </script>
 
 <style scoped>
-#app {
-  width: 80vw;
+.g6-box {
+  width: 90vw;
   height: 80vh;
+  margin: 5vh auto;
+  box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.25);
 }
 </style>
 
