@@ -1,4 +1,7 @@
-export default function (G6) {
+import G6 from "@antv/g6";
+import store from '../store'
+
+export default function () {
   G6.registerBehavior('add-edge', {
     getEvents() {
       return {
@@ -16,6 +19,16 @@ export default function (G6) {
       const graph = self.graph;
 
       const shapeName = evt.target.get('name')
+
+      const curNode = evt.item
+      const curNodeId = curNode.getModel().id
+      if(curNodeId === 'END_NODE'){
+        return
+      }
+
+      if(curNodeId === 'START_NODE' && curNode.getEdges().length > 0){
+        return
+      }
 
       if (shapeName.includes('anchor')) {
         const node = evt.item.getModel().id;
@@ -73,8 +86,23 @@ export default function (G6) {
       const graph = self.graph;
 
       const shapeName = evt.target.get('name')
-
       if (!shapeName) {
+        return
+      }
+
+      const curNode = evt.item
+      const curNodeId = curNode.getModel().id
+      if(curNodeId === 'START_NODE'){
+        graph.removeItem(self._edge);
+        self._addingEdge = false
+        self._edge = null
+        return
+      }
+
+      if(curNodeId === 'END_NODE' && curNode.getEdges().length > 0){
+        graph.removeItem(self._edge);
+        self._addingEdge = false
+        self._edge = null
         return
       }
 
@@ -82,17 +110,14 @@ export default function (G6) {
         const node = evt.item.getModel().id;
         const nodeAnchor = evt.target.attrs._pointIndex
         graph.setItemState(self._edge, 'adding', false)
-        graph.updateItem(self._edge, {
+        graph.updateItem(self._edge, { 
           target: node,
           targetAnchor: nodeAnchor
         });
         self._addingEdge = false
         self._edge = null
 
-        let _doStack = graph.get('_doStack')
-        _doStack.push(graph.save())
-        graph.set('_doStack',_doStack)
-        graph.set('_doStackIndex',_doStack.length - 1)
+        store.addEdge()
 
       } else if (self._edge) {
         graph.removeItem(self._edge);

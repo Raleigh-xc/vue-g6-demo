@@ -1,30 +1,53 @@
 <template>
   <div class="toolbar">
-
     <span
       class="action iconfont icon-chexiao"
       :class="{disabled: !canUndo}"
-      @click="handleAction('UNDO')"
+      @click="handleAction('UNDO',$event)"
     />
 
     <span
       class="action iconfont icon-zhongzuo"
       :class="{disabled: !canRedo}"
-      @click="handleAction('REDO')"
+      @click="handleAction('REDO',$event)"
     />
 
     <span class="divider"></span>
 
-    <span class="action iconfont icon-bianji1" @click="handleAction('EDIT')"></span>
-    <span class="action iconfont icon-shanchu" @click="handleAction('DELETE')"></span>
+    <span
+      class="action iconfont icon-bianji1"
+      :class="{disabled: !canEdit}"
+      @click="handleAction('EDIT',$event)"
+    ></span>
+    <span
+      class="action iconfont icon-shanchu"
+      :class="{disabled: !canDelete}"
+      @click="handleAction('DELETE',$event)"
+    ></span>
 
     <span class="divider"></span>
 
-    <span class="action iconfont icon-fangda1" @click="handleAction('ZOOM_IN')"></span>
-    <span class="action iconfont icon-suoxiao1" @click="handleAction('ZOOM_OUT')"></span>
+    <span
+      class="action iconfont icon-fangda1"
+      :class="{disabled: !canZoomIn}"
+      @click="handleAction('ZOOM_IN',$event)"
+    ></span>
+    <span
+      class="action iconfont icon-suoxiao1"
+      :class="{disabled: !canZoomOut}"
+      @click="handleAction('ZOOM_OUT',$event)"
+    ></span>
 
-    <span class="action iconfont icon-fangda" @click="handleAction('FULL')"></span>
-    <span class="action iconfont icon-suoxiao" @click="handleAction('EXIT')"></span>
+    <span
+      class="action iconfont icon-fangda"
+      :class="{disabled: isFullScreen}"
+      @click="handleAction('FULL',$event)"
+    ></span>
+    <span
+      class="action iconfont icon-suoxiao"
+      :class="{disabled: !isFullScreen}"
+      @click="handleAction('EXIT',$event)"
+    ></span>
 
     <div class="btn-save" @click="handleSave">保存</div>
   </div>
@@ -49,59 +72,62 @@ export default {
     canRedo() {
       const { stackList, stackIndex } = this.rootState;
       return stackList.length - 1 > stackIndex;
+    },
+    canEdit() {
+      const { nodeSelectedList } = store.state;
+      return nodeSelectedList.length === 1;
+    },
+    canDelete() {
+      const { nodeSelectedList, edgeSelectedList } = store.state;
+      return nodeSelectedList.length + edgeSelectedList.length > 0;
+    },
+    canZoomIn() {
+      const { currentZoom, maxZoom } = this.rootState;
+      return currentZoom < maxZoom;
+    },
+    canZoomOut() {
+      const { currentZoom, minZoom } = this.rootState;
+      return currentZoom > minZoom;
+    },
+    isFullScreen() {
+      const { fullScreen } = store.state;
+      return fullScreen;
     }
   },
 
   methods: {
-    handleAction(action) {
-      console.log(action);
-      switch (action.code) {
+    handleAction(action, event) {
+      const disabled = event.target.classList.contains("disabled");
+      if (disabled) {
+        console.log(`${action} is disabled`);
+        return;
+      }
+      switch (action) {
         case "UNDO":
-          this.handleUndo();
+          store.undo();
           break;
         case "REDO":
-          this.handleRedo();
+          store.redo();
           break;
         case "EDIT":
           this.handleEdit();
           break;
         case "DELETE":
-          this.handleDelete();
+          store.delete();
           break;
         case "ZOOM_IN":
-          this.handleZoomIn();
+          store.zoomIn();
           break;
         case "ZOOM_OUT":
-          this.handleZoomOut();
+          store.zoomOut();
           break;
         case "FULL":
-          this.handleFull();
+          store.full();
           break;
         case "EXIT":
-          this.handleExit();
+          store.exit();
           break;
       }
-    },
-
-    handleUndo() {
-
-      store.toolbar.undo();
-
-      const graph = this.$parent.graph;
-      let _doStack = graph.get("_doStack");
-      let _doStackIndex = graph.get("_doStackIndex");
-      const data = _doStack[_doStackIndex - 1];
-      graph.read(data);
-      graph.set("_doStackIndex", _doStackIndex - 1);
-    },
-
-    handleRedo() {
-      const graph = this.$parent.graph;
-      let _doStack = graph.get("_doStack");
-      let _doStackIndex = graph.get("_doStackIndex");
-      const data = _doStack[_doStackIndex + 1];
-      graph.read(data);
-      graph.set("_doStackIndex", _doStackIndex + 1);
     },
 
     handleEdit() {
@@ -122,59 +148,7 @@ export default {
       }
     },
 
-    handleDelete() {
-      const { graph } = this.rootState;
-      if (!graph) {
-        return;
-      }
-
-      const nodes = graph.findAllByState("node", "selected");
-      console.log(nodes);
-
-      // 删除选中对的节点
-      nodes.forEach(node => {
-        // 删除节点相关的边
-        const edges = node.getEdges();
-        edges.forEach(edge => {
-          graph.removeItem(edge);
-        });
-
-        graph.removeItem(node);
-      });
-
-      const edges = graph.findAllByState("edge", "selected");
-      console.log(edges);
-
-      // 删除选中对的边
-      edges.forEach(edge => {
-        graph.removeItem(edge);
-      });
-    },
-
-    handleZoomIn() {
-      const { graph } = this.$parent;
-      if (!graph) {
-        return;
-      }
-      const currentZoom = graph.getZoom();
-      graph.zoomTo(currentZoom + 0.5);
-    },
-
-    handleZoomOut() {
-      const { graph } = this.$parent;
-      if (!graph) {
-        return;
-      }
-      const currentZoom = graph.getZoom();
-      graph.zoomTo(currentZoom - 0.5);
-    },
-
     handleSave() {
-      // console.log(JSON.stringify());
-
-      // store.setMessageAction('save')
-      // console.log(store.state.message)
-
       const data = this.$parent.graph.save();
       const edges = data.edges.map(item => {
         const { source, sourceAnchor, target, targetAnchor } = item;
@@ -206,17 +180,6 @@ export default {
       console.log(newData);
 
       this.$emit("save", JSON.stringify(newData));
-    },
-
-    handleFull() {
-      // const data = this.$parent.graph.save()
-      this.$parent.graph.clear();
-      document.querySelector(".g6-process-container").requestFullscreen();
-      // this.$parent.graph.changeSize(1700,700)
-      this.$parent.graph.read({});
-    },
-    handleExit() {
-      document.exitFullscreen();
     }
   }
 };
@@ -248,8 +211,9 @@ export default {
   margin: 0 10px;
 }
 
-.action.disabled{
+.action.disabled {
   color: #ccc;
+  cursor: not-allowed;
 }
 
 .action:first-child {
@@ -270,7 +234,7 @@ export default {
   cursor: pointer;
 }
 
-.divider{
+.divider {
   height: 15px;
   width: 1px;
   background: #ddd;

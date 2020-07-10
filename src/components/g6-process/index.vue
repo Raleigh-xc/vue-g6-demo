@@ -16,6 +16,7 @@ import ContextMenu from "./widgets/contextmenu/contextmenu";
 
 import registerBehavior from "./behavior";
 import registerShape from "./shape";
+import store from "./store";
 
 export default {
   name: "G6Process",
@@ -33,7 +34,7 @@ export default {
     },
     data: {
       type: String,
-      default: ''
+      default: ""
     }
   },
 
@@ -61,6 +62,10 @@ export default {
     handleSave(data) {
       console.log(data);
       this.$emit("save", data);
+    },
+
+    initData(value) {
+      store.readData(value);
     }
   }
 };
@@ -77,5 +82,6 @@ export default {
   padding-left: 200px;
   box-sizing: border-box;
   border: 1px solid #eee;
+  background: #fff;
 }
 </style>

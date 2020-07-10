@@ -41,6 +41,8 @@ export default {
         _originId: item.id,
         _timeStamp: id
       }
+
+      graph.add('node', node)
       store.addNode(node)
 
 

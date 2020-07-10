@@ -1,6 +1,6 @@
 import G6 from '@antv/g6'
 export default function () {
-  G6.registerNode('base-node', {
+  G6.registerNode('end-node', {
 
     afterDraw(cfg, group) {
       this._drawAnchor(cfg, group)

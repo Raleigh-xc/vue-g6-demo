@@ -1,5 +1,5 @@
 <template>
-  <div class="graph" ref="graph"></div>
+  <div class="graph myGraph" ref="graph"></div>
 </template>
 
 <script>
@@ -19,14 +19,14 @@ export default {
     };
   },
 
-  watch: {
-    data(value) {
-      if (this.graph) {
-        let data = value ? JSON.parse(value) : {};
-        this.graph.read(data);
-      }
-    }
-  },
+  // watch: {
+  //   data(value) {
+  //     if (this.graph) {
+  //       let data = value ? JSON.parse(value) : {};
+  //       this.graph.read(data);
+  //     }
+  //   }
+  // },
 
   methods: {
     drawGraph(G6) {
@@ -45,12 +45,13 @@ export default {
             "drag-canvas",
             "zoom-canvas",
             "drag-node",
-            "click-select",
+            "brush-select",
 
             "add-edge",
-            "click-edge",
+            "click-item",
             "hover-node",
-            "context-menu"
+            "context-menu",
+            "wheel"
           ]
         },
 
@@ -66,7 +67,7 @@ export default {
           labelCfg: {
             style: {
               fill: "#666",
-              fontSize: 18
+              fontSize: 16
             }
           }
         },
@@ -128,10 +129,10 @@ export default {
         plugins: [grid, minimap]
       });
 
-      let data = this.data ? JSON.parse(this.data) : {};
+      // let data = this.data ? JSON.parse(this.data) : {};
 
-      graph.data(data);
-      graph.render();
+      // graph.data(data);
+      // graph.render();
 
       this.graph = graph;
       store.initGraph(graph)

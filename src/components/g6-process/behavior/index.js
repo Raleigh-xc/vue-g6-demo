@@ -1,13 +1,16 @@
+import G6 from "@antv/g6";
 import addEdge from './addEdge'
-import clickEdge from './clickEdge'
+import clickItem from './clickItem'
 import hoverNode from './hoverNode'
 import contextMenu from './contextMenu'
+import wheel from './wheel'
 
-function registerBehavior(G6){
+function registerBehavior(){
   addEdge(G6)
-  clickEdge(G6)
+  clickItem(G6)
   hoverNode(G6)
   contextMenu(G6)
+  wheel(G6)
 }
 
 export default registerBehavior

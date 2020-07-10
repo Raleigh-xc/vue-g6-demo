@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div class="g6-box">
-      <g6-process :elements="elements" :data="data" @edit="handleEdit" @save="handleSave"/>
+      <g6-process ref="g6process" :elements="elements" @edit="handleEdit" @save="handleSave" />
     </div>
   </div>
 </template>
@@ -20,18 +20,15 @@ export default {
           title: item + "_" + (index + 1)
         };
       }),
-      data: '',
+      data: "",
       list: [],
       map: {}
     };
   },
 
   mounted() {
-    // setTimeout(() => {
-    //   this.data =
-    //     '{"edges":[{"source":"1594194008942","sourceAnchor":3,"target":"1594194009842","targetAnchor":1}],"nodes":[{"id":"1594194008942","label":"wow_1","x":292,"y":159,"_originId":1,"_timeStamp":"1594194008942"},{"id":"1594194009842","label":"wow_2","x":342,"y":313,"_originId":2,"_timeStamp":"1594194009842"}]}';
-    // }, 3000);
-    
+    // const data = '{"edges":[{"source":"1594194008942","sourceAnchor":3,"target":"1594194009842","targetAnchor":1}],"nodes":[{"id":"1594194008942","label":"wow_1","x":292,"y":159,"_originId":1,"_timeStamp":"1594194008942"},{"id":"1594194009842","label":"wow_2","x":342,"y":313,"_originId":2,"_timeStamp":"1594194009842"}]}';
+    this.$refs.g6process.initData();
   },
 
   methods: {

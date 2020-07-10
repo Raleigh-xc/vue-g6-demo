@@ -8,6 +8,7 @@
 <script>
 // import cloneDeep from "lodash.clonedeep";
 // import state from '../../store'
+import store from "../../store";
 
 export default {
   name: "ContextMenu",
@@ -63,6 +64,8 @@ export default {
       const contextMenu = document.querySelector(".g6-contextMenu");
       contextMenu.style.left = "-150px";
       graph.set("_contextMenuSelected", null);
+
+      store.addStack()
     }
   }
 };
@@ -83,6 +86,7 @@ export default {
   text-align: center;
   line-height: 2;
   margin: 0;
+  z-index: 10;
 }
 .g6-contextMenu li {
   cursor: pointer;
