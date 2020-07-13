@@ -1,3 +1,5 @@
+import { fittingString } from '../utils/fittingString'
+
 export default {
   debug: true,
   state: {
@@ -21,6 +23,9 @@ export default {
   },
 
   addStack () {
+
+    console.log('addStack')
+
     const { graph, stackList, maxStack } = this.state
     stackList.push(graph.save())
 
@@ -29,6 +34,12 @@ export default {
     }
 
     this.state.stackIndex = stackList.length - 1
+  },
+
+  resetStack () {
+    const lastStack = this.state.stackList.pop()
+    this.state.stackList = [lastStack]
+    this.state.stackIndex = 0
   },
 
   initGraph (graph) {
@@ -47,18 +58,30 @@ export default {
       this.itemSelectChange()
     })
 
-    window.addEventListener('resize',()=>{
+    window.addEventListener('resize', () => {
       this.changeSize()
     })
 
-    
   },
 
   readData (value) {
+
     const { graph } = this.state
 
     if (value) {
-      graph.read(JSON.parse(value));
+      const data = JSON.parse(value)
+      console.log(data)
+      let isBeyond = false
+      data.nodes && data.nodes.forEach(node => {
+        const label = node.label
+        node._label = label
+        node.label = fittingString(label, 160, 16)
+        console.log(node.x < 0, node.y < 0)
+        // 有越界之后就不重新取值了
+        !isBeyond && (isBeyond = node.x < 0 || node.y < 0)
+      })
+      graph.read(data);
+      isBeyond && this.fitView()
     } else {
       const graphWidth = graph.getWidth()
       const graphHeight = graph.getHeight()
@@ -135,7 +158,7 @@ export default {
     console.log(edges);
     // 删除选中对的边
     edges.forEach(edge => {
-      graph.removeItem(edge);
+      !edge.destroyed && graph.removeItem(edge);
     });
 
     this.itemSelectChange()
@@ -177,7 +200,7 @@ export default {
     const container = window.getComputedStyle(document.querySelector('.graph.myGraph'));
     const height = parseInt(container.height)
     const width = parseInt(container.width)
-    console.log(height,width)
+    console.log(height, width)
     graph.changeSize(width, height);
   },
 
@@ -190,6 +213,14 @@ export default {
   exit () {
     document.exitFullscreen()
     this.state.fullScreen = false
+  },
+
+  fitView () {
+    const { graph } = this.state
+    graph.fitView(30);
+    setTimeout(() => {
+      this.changeZoom()
+    }, 0);
   }
 
 }

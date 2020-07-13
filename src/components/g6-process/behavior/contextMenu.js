@@ -22,6 +22,29 @@ function getElementTop (element) {
   return actualTop;
 }
 
+/**
+  *  @description 获取滚动条滑动的距离
+  *  document.documentElement.scrollTop  | document.body.scrollTop
+  *  document.documentElement.scrollLeft  | document.body.scrollLeft
+  *  IE8 和 IE8 以下的浏览器不兼容
+  *  window.pageYOffset
+  *  window.pageXOffset
+  * @returns {x:0,y:0}
+  */
+ function getScrollOffset(){
+  if(window.pageXOffset){
+      return {
+          x: window.pageXOffset,
+          y:window.pageYOffset
+      }
+  }else{
+      return {
+          x: document.body.scrollLeft + document.documentElement.scrollLeft,
+          y: document.body.scrollTop + document.documentElement.scrollTop,
+      }
+  }
+}
+
 export default function (G6) {
 
   G6.registerBehavior('context-menu', {
@@ -59,8 +82,10 @@ export default function (G6) {
       const position = graph.getClientByPoint(evt.x, evt.y);
       console.log(position)
 
-      contextMenu.style.left = `${position.x - offsetX}px`;
-      contextMenu.style.top = `${position.y -offsetY}px`;
+      const scrollInfo = getScrollOffset()
+
+      contextMenu.style.left = `${position.x - offsetX + scrollInfo.x}px`;
+      contextMenu.style.top = `${position.y - offsetY + scrollInfo.y}px`;
 
       contextMenu.classList.add('node-menu')
       contextMenu.classList.remove('edge-menu')
@@ -99,8 +124,10 @@ export default function (G6) {
       const position = graph.getClientByPoint(evt.x, evt.y);
       console.log(position)
 
-      contextMenu.style.left = `${position.x - offsetX}px`;
-      contextMenu.style.top = `${position.y -offsetY}px`;
+      const scrollInfo = getScrollOffset()
+
+      contextMenu.style.left = `${position.x - offsetX + scrollInfo.x}px`;
+      contextMenu.style.top = `${position.y - offsetY + scrollInfo.y}px`;
 
       contextMenu.classList.add('edge-menu')
       contextMenu.classList.remove('node-menu')

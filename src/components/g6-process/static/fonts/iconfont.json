@@ -6,6 +6,34 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "1270",
+      "name": "错误",
+      "font_class": "cuowu",
+      "unicode": "e60b",
+      "unicode_decimal": 58891
+    },
+    {
+      "icon_id": "1338",
+      "name": "文本输入",
+      "font_class": "wenbenshuru",
+      "unicode": "e607",
+      "unicode_decimal": 58887
+    },
+    {
+      "icon_id": "1368",
+      "name": "全屏",
+      "font_class": "quanping",
+      "unicode": "e608",
+      "unicode_decimal": 58888
+    },
+    {
+      "icon_id": "1382",
+      "name": "定位",
+      "font_class": "dingwei",
+      "unicode": "e60a",
+      "unicode_decimal": 58890
+    },
+    {
       "icon_id": "1264",
       "name": "编辑",
       "font_class": "bianji1",

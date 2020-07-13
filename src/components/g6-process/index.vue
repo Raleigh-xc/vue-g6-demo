@@ -66,6 +66,10 @@ export default {
 
     initData(value) {
       store.readData(value);
+    },
+
+    resetStack() {
+      store.resetStack();
     }
   }
 };
@@ -83,5 +87,17 @@ export default {
   box-sizing: border-box;
   border: 1px solid #eee;
   background: #fff;
+}
+
+.g6-process-container ::-webkit-scrollbar {
+  width: 5px;
+  background-color: #eee;
+}
+.g6-process-container ::-webkit-scrollbar-thumb {
+  border-radius: 0;
+  background: #ccc;
+}
+.g6-process-container ::-webkit-scrollbar-track {
+  border-radius: 0;
 }
 </style>

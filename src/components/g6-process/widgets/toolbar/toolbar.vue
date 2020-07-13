@@ -15,7 +15,7 @@
     <span class="divider"></span>
 
     <span
-      class="action iconfont icon-bianji1"
+      class="action iconfont icon-wenbenshuru"
       :class="{disabled: !canEdit}"
       @click="handleAction('EDIT',$event)"
     ></span>
@@ -48,6 +48,15 @@
       :class="{disabled: !isFullScreen}"
       @click="handleAction('EXIT',$event)"
     ></span>
+
+    <span class="divider"></span>
+
+    <span
+      class="action iconfont icon-dingwei"
+      @click="handleAction('FIT_VIEW',$event)"
+    ></span>
+
+    <span class="scale">当前比例：{{currentScale}}</span>
 
     <div class="btn-save" @click="handleSave">保存</div>
   </div>
@@ -89,6 +98,10 @@ export default {
       const { currentZoom, minZoom } = this.rootState;
       return currentZoom > minZoom;
     },
+    currentScale() {
+      const { currentZoom } = store.state;
+      return `${parseInt(currentZoom * 100)}%`;
+    },
     isFullScreen() {
       const { fullScreen } = store.state;
       return fullScreen;
@@ -127,6 +140,9 @@ export default {
         case "EXIT":
           store.exit();
           break;
+        case "FIT_VIEW":
+          store.fitView();
+          break;
       }
     },
 
@@ -140,11 +156,11 @@ export default {
       if (nodes.length === 1) {
         const item = nodes[0];
         const model = item.getModel();
-        const data = {
+        const target = {
           id: model._originId,
           timeStamp: model._timeStamp
         };
-        this.$emit("edit", data);
+        this.$emit("edit", target);
       }
     },
 
@@ -161,10 +177,10 @@ export default {
       });
 
       const nodes = data.nodes.map(item => {
-        const { id, label, x, y, _originId, _timeStamp } = item;
+        const { id, x, y, _originId, _label, _timeStamp } = item;
         return {
           id,
-          label,
+          label: _label,
           x,
           y,
           _originId,
@@ -218,6 +234,12 @@ export default {
 
 .action:first-child {
   margin-left: 20px;
+}
+
+.scale {
+  font-size: 14px;
+  color: #666;
+  margin-left: 10px;
 }
 
 .btn-save {

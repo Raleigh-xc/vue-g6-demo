@@ -129,11 +129,6 @@ export default {
         plugins: [grid, minimap]
       });
 
-      // let data = this.data ? JSON.parse(this.data) : {};
-
-      // graph.data(data);
-      // graph.render();
-
       this.graph = graph;
       store.initGraph(graph)
 
