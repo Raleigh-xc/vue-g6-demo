@@ -4,50 +4,55 @@ export default {
   debug: true,
   state: {
     name: 'nothing here ~~~',
-
     graph: null,
-
     currentZoom: 1,
     maxZoom: 10,
     minZoom: 0.2,
-
     stackList: [],
     stackIndex: -1,
     maxStack: 20,
-
     nodeSelectedList: [],
     edgeSelectedList: [],
-
     fullScreen: false
-
   },
 
-  addStack () {
-
-    console.log('addStack')
-
-    const { graph, stackList, maxStack } = this.state
-    stackList.push(graph.save())
-
-    if (stackList.length > maxStack) {
-      stackList.shift()
+  resetGraph () {
+    this.state = {
+      name: 'nothing here ~~~',
+      graph: null,
+      currentZoom: 1,
+      maxZoom: 10,
+      minZoom: 0.2,
+      stackList: [],
+      stackIndex: -1,
+      maxStack: 20,
+      nodeSelectedList: [],
+      edgeSelectedList: [],
+      fullScreen: false
     }
-
-    this.state.stackIndex = stackList.length - 1
-  },
-
-  resetStack () {
-    const lastStack = this.state.stackList.pop()
-    this.state.stackList = [lastStack]
-    this.state.stackIndex = 0
   },
 
   initGraph (graph) {
-    this.state.graph = graph
+    // this.resetGraph();
 
+    this.state.graph = graph
     this.state.currentZoom = graph.getZoom();
     this.state.maxZoom = graph.getMaxZoom()
     this.state.minZoom = graph.getMinZoom()
+
+    // this.state = {
+    //   name: 'nothing here ~~~',
+    //   graph: graph,
+    //   currentZoom: graph.getZoom(),
+    //   maxZoom: graph.getMaxZoom(),
+    //   minZoom: graph.getMinZoom(),
+    //   stackList: [],
+    //   stackIndex: -1,
+    //   maxStack: 20,
+    //   nodeSelectedList: [],
+    //   edgeSelectedList: [],
+    //   fullScreen: false
+    // }
 
     graph.on('nodeselectchange', e => {
       e.selectedItems.nodes.forEach(item => {
@@ -64,20 +69,31 @@ export default {
 
   },
 
+  addStack () {
+    const { graph, stackList, maxStack } = this.state
+    stackList.push(graph.save())
+    if (stackList.length > maxStack) {
+      stackList.shift()
+    }
+    this.state.stackIndex = stackList.length - 1
+  },
+
+  resetStack () {
+    const lastStack = this.state.stackList.pop()
+    this.state.stackList = [lastStack]
+    this.state.stackIndex = 0
+  },
+
   readData (value) {
-
     const { graph } = this.state
-
     if (value) {
       const data = JSON.parse(value)
-      console.log(data)
       let isBeyond = false
       data.nodes && data.nodes.forEach(node => {
         const label = node.label
         node._label = label
         node.label = fittingString(label, 160, 16)
-        console.log(node.x < 0, node.y < 0)
-        // 有越界之后就不重新取值了
+        // 判断越界
         !isBeyond && (isBeyond = node.x < 0 || node.y < 0)
       })
       graph.read(data);
@@ -102,7 +118,6 @@ export default {
       graph.add('node', startNode)
       graph.add('node', endNode)
     }
-
     this.addStack()
   },
 
@@ -191,7 +206,6 @@ export default {
     const { graph } = this.state
     const currentZoom = graph.getZoom();
     this.state.currentZoom = currentZoom
-
     console.log(currentZoom)
   },
 
@@ -207,7 +221,6 @@ export default {
   full () {
     document.querySelector(".g6-process-container").requestFullscreen()
     this.state.fullScreen = true
-    // this.changeSize()
   },
 
   exit () {
