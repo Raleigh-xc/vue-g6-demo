@@ -34,4 +34,5 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 - [√]🍎滚轮缩放监控
 - [√]🍎开始结束节点
 - [√]🍎批量选中屏蔽开始结束
-- 🐛全屏黑屏
+- 🍎支持节点位移
+- [√]🐛全屏黑屏

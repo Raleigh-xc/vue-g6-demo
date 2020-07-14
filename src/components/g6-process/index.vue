@@ -70,6 +70,10 @@ export default {
 
     resetStack() {
       store.resetStack();
+    },
+
+    hasChange(){
+      return store.hasChange()
     }
   }
 };

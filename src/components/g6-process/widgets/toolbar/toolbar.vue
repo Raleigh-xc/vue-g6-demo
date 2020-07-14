@@ -51,14 +51,13 @@
 
     <span class="divider"></span>
 
-    <span
-      class="action iconfont icon-dingwei"
-      @click="handleAction('FIT_VIEW',$event)"
-    ></span>
+    <span class="action iconfont icon-dingwei" @click="handleAction('FIT_VIEW',$event)"></span>
 
     <span class="scale">当前比例：{{currentScale}}</span>
 
-    <div class="btn-save" @click="handleSave">保存</div>
+    <!-- {{rootState.stackList.length}}/{{rootState.stackIndex}}/{{rootState.savedIndex}} -->
+
+    <div class="btn-save" :class="{disabled: !hasChange}" @click="handleSave">保存</div>
   </div>
 </template>
 
@@ -105,6 +104,10 @@ export default {
     isFullScreen() {
       const { fullScreen } = store.state;
       return fullScreen;
+    },
+    hasChange() {
+      const { stackList, stackIndex, savedIndex } = store.state;
+      return stackList.length > 1 && stackIndex !== savedIndex;
     }
   },
 
@@ -146,6 +149,18 @@ export default {
       }
     },
 
+    isNewNode(id, timeStamp) {
+      const latest = store.state.latest;
+      if (!latest) {
+        return true;
+      } else {
+        const nodes = JSON.parse(latest).nodes;
+        return !!nodes.find(
+          item => item._timeStamp === timeStamp && item._originId === id
+        );
+      }
+    },
+
     handleEdit() {
       const { graph } = this.$parent;
       if (!graph) {
@@ -177,10 +192,10 @@ export default {
       });
 
       const nodes = data.nodes.map(item => {
-        const { id, x, y, _originId, _label, _timeStamp } = item;
+        const { id, x, y, _originId, label, _label, _timeStamp } = item;
         return {
           id,
-          label: _label,
+          label: _label || label,
           x,
           y,
           _originId,
@@ -188,14 +203,13 @@ export default {
         };
       });
 
-      const newData = {
+      const newData = JSON.stringify({
         edges,
         nodes
-      };
+      });
 
-      console.log(newData);
-
-      this.$emit("save", JSON.stringify(newData));
+      store.save();
+      this.$emit("save", newData);
     }
   }
 };
@@ -254,6 +268,10 @@ export default {
   position: absolute;
   right: 10px;
   cursor: pointer;
+}
+.btn-save.disabled {
+  background: #ccc;
+  cursor: not-allowed;
 }
 
 .divider {

@@ -73,7 +73,7 @@ export default {
 
 <style scoped>
 .g6-contextMenu {
-  position: absolute;
+  position: fixed;
   list-style-type: none;
   padding: 10px 8px;
   left: -150px;

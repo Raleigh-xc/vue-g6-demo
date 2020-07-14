@@ -3,6 +3,8 @@
     <div class="g6-box">
       <g6-process ref="g6process" :elements="elements" @edit="handleEdit" @save="handleSave" />
     </div>
+
+    <!-- <span @click="handleHasChange">hasChange</span> -->
   </div>
 </template>
 
@@ -17,7 +19,10 @@ export default {
       elements: new Array(45).fill("wow").map((item, index) => {
         return {
           id: index + 1,
-          name: Math.random() > 0.3 ? `${item}_${index + 1}听说长文本有问题 我不相信`:`${item}_${index + 1}`
+          name:
+            Math.random() > 0.3
+              ? `${item}_${index + 1}听说长文本有问题 我不相信`
+              : `${item}_${index + 1}`
         };
       }),
       data: "",
@@ -27,27 +32,34 @@ export default {
   },
 
   mounted() {
-    let data  = null
-    data = '{"edges":[{"source":"1594194008942","sourceAnchor":3,"target":"1594194009842","targetAnchor":1}],"nodes":[{"id":"1594194008942","label":"wow_1","x":-292,"y":159,"_originId":1,"_timeStamp":"1594194008942"},{"id":"1594194009842","label":"wow_2","x":342,"y":313,"_originId":2,"_timeStamp":"1594194009842"}]}';
-    this.$refs.g6process.initData(data);
+    setTimeout(() => {
+      let data = null;
+      data =
+        '{"edges":[{"source":"1594194008942","sourceAnchor":3,"target":"1594194009842","targetAnchor":1}],"nodes":[{"id":"1594194008942","label":"wow_1","x":292,"y":159,"_originId":1,"_timeStamp":"1594194008942"},{"id":"1594194009842","label":"wow_2","x":342,"y":313,"_originId":2,"_timeStamp":"1594194009842"}]}';
+      this.$refs.g6process.initData(data);
+    }, 1000);
   },
 
   methods: {
     handleEdit(data) {
       console.log(data);
       // 跳转页面后置灰
-      this.$refs.g6process.resetStack()
+      // this.$refs.g6process.resetStack()
     },
 
     handleSave(data) {
       console.log(data);
+    },
+
+    handleHasChange() {
+      alert(this.$refs.g6process.hasChange());
     }
   }
 };
 </script>
 
 <style scoped>
-#app{
+#app {
   height: 2000px;
 }
 .g6-box {

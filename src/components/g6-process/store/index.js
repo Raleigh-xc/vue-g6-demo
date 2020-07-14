@@ -1,8 +1,7 @@
 import { fittingString } from '../utils/fittingString'
 
-export default {
-  debug: true,
-  state: {
+const defaultConfig = () => {
+  return {
     name: 'nothing here ~~~',
     graph: null,
     currentZoom: 1,
@@ -10,49 +9,33 @@ export default {
     minZoom: 0.2,
     stackList: [],
     stackIndex: -1,
+    savedIndex: 0,
     maxStack: 20,
+    unique: true, // 节点唯一
     nodeSelectedList: [],
     edgeSelectedList: [],
-    fullScreen: false
+    fullScreen: false,
+    graphNodes: []
+  }
+}
+
+export default {
+  debug: true,
+  state: {
+    ...defaultConfig()
   },
 
   resetGraph () {
-    this.state = {
-      name: 'nothing here ~~~',
-      graph: null,
-      currentZoom: 1,
-      maxZoom: 10,
-      minZoom: 0.2,
-      stackList: [],
-      stackIndex: -1,
-      maxStack: 20,
-      nodeSelectedList: [],
-      edgeSelectedList: [],
-      fullScreen: false
-    }
+    Object.assign(this.state, { ...defaultConfig() })
   },
 
   initGraph (graph) {
-    // this.resetGraph();
+    this.resetGraph();
 
     this.state.graph = graph
     this.state.currentZoom = graph.getZoom();
     this.state.maxZoom = graph.getMaxZoom()
     this.state.minZoom = graph.getMinZoom()
-
-    // this.state = {
-    //   name: 'nothing here ~~~',
-    //   graph: graph,
-    //   currentZoom: graph.getZoom(),
-    //   maxZoom: graph.getMaxZoom(),
-    //   minZoom: graph.getMinZoom(),
-    //   stackList: [],
-    //   stackIndex: -1,
-    //   maxStack: 20,
-    //   nodeSelectedList: [],
-    //   edgeSelectedList: [],
-    //   fullScreen: false
-    // }
 
     graph.on('nodeselectchange', e => {
       e.selectedItems.nodes.forEach(item => {
@@ -63,19 +46,44 @@ export default {
       this.itemSelectChange()
     })
 
+    // graph.on('afteradditem', () => {
+    //   this.updateGraphNodes()
+    // })
+
+    // graph.on('afterremoveitem', () => {
+    //   this.updateGraphNodes()
+    // })
+
+
     window.addEventListener('resize', () => {
       this.changeSize()
     })
 
   },
 
+  updateGraphNodes () {
+    // clearTimeout(this.gr)
+    const { graph } = this.state
+    const nodes = graph.getNodes();
+    console.log(nodes)
+    this.graphNodes = nodes.map(node => node.get('model')._originId)
+  },
+
   addStack () {
-    const { graph, stackList, maxStack } = this.state
-    stackList.push(graph.save())
-    if (stackList.length > maxStack) {
+
+    const { graph, stackList, stackIndex, maxStack } = this.state
+
+    if (this.state.stackIndex + 1 >= maxStack) {
+      stackList.push(graph.save())
       stackList.shift()
+      this.state.savedIndex--
+    } else {
+      this.state.stackList = stackList.slice(0, stackIndex + 1).concat(graph.save())
     }
-    this.state.stackIndex = stackList.length - 1
+
+    this.state.stackIndex = this.state.stackList.length - 1
+
+    this.updateGraphNodes()
   },
 
   resetStack () {
@@ -84,13 +92,24 @@ export default {
     this.state.stackIndex = 0
   },
 
+  // updateLatest(value){
+  //   this.state.latest = value
+  // },
+
   readData (value) {
+    // this.updateLatest(value)
+
     const { graph } = this.state
     if (value) {
       const data = JSON.parse(value)
       let isBeyond = false
       data.nodes && data.nodes.forEach(node => {
-        const label = node.label
+        let label = node.label
+        if (node.id === 'START_NODE') {
+          label = '开 始'
+        } else if (node.id === 'END_NODE') {
+          label = '结 束'
+        }
         node._label = label
         node.label = fittingString(label, 160, 16)
         // 判断越界
@@ -147,6 +166,8 @@ export default {
     const data = stackList[stackIndex - 1]
     graph.read(data);
     this.state.stackIndex--
+
+    this.updateGraphNodes()
   },
 
   redo () {
@@ -154,6 +175,8 @@ export default {
     const data = stackList[stackIndex + 1]
     graph.read(data);
     this.state.stackIndex++
+
+    this.updateGraphNodes()
   },
 
   delete () {
@@ -234,6 +257,15 @@ export default {
     setTimeout(() => {
       this.changeZoom()
     }, 0);
+  },
+
+  save () {
+    this.state.savedIndex = this.state.stackIndex
+  },
+
+  hasChange () {
+    const { stackList, stackIndex, savedIndex } = this.state;
+    return stackList.length > 1 && stackIndex !== savedIndex;
   }
 
 }
