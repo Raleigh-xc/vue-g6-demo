@@ -66,7 +66,7 @@ export default {
     const { graph } = this.state
     const nodes = graph.getNodes();
     console.log(nodes)
-    this.graphNodes = nodes.map(node => node.get('model')._originId)
+    this.state.graphNodes = nodes.map(node => node.get('model')._originId)
   },
 
   addStack () {

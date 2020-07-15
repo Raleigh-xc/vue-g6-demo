@@ -32,16 +32,22 @@ export default {
 
   data() {
     return {
-      searchKey: ""
+      searchKey: "",
+      rootState: store.state
     };
   },
 
   computed: {
     filterItems() {
-      if (this.searchKey === "") {
-        return this.elements;
+      const { searchKey, rootState } = this;
+      const { graphNodes, unique } = rootState;
+      if (unique) {
+        return this.elements.filter(
+          item => item.name.includes(searchKey) && !graphNodes.includes(item.id)
+        );
+      } else {
+        return this.elements.filter(item => item.name.includes(searchKey));
       }
-      return this.elements.filter(item => item.name.includes(this.searchKey));
     }
   },
 
