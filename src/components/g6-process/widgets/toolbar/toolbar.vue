@@ -57,7 +57,7 @@
 
     <!-- {{rootState.stackList.length}}/{{rootState.stackIndex}}/{{rootState.savedIndex}} -->
 
-    <div class="btn-save" :class="{disabled: !hasChange}" @click="handleSave">保存</div>
+    <div class="btn-save" :class="{disabled: !hasChange}" @click="handleSave($event)">保存</div>
   </div>
 </template>
 
@@ -167,6 +167,8 @@ export default {
         return;
       }
 
+      store.exit()
+
       const nodes = graph.findAllByState("node", "selected");
       if (nodes.length === 1) {
         const item = nodes[0];
@@ -180,36 +182,43 @@ export default {
     },
 
     handleSave() {
-      const data = this.$parent.graph.save();
-      const edges = data.edges.map(item => {
-        const { source, sourceAnchor, target, targetAnchor } = item;
-        return {
-          source,
-          sourceAnchor,
-          target,
-          targetAnchor
-        };
-      });
+      this.$parent.graph.moveTo(0,0)
+      // const disabled = event.target.classList.contains("disabled");
+      // if (disabled) {
+      //   console.log(`save is disabled`);
+      //   return;
+      // }
+      
+      // const data = this.$parent.graph.save();
+      // const edges = data.edges.map(item => {
+      //   const { source, sourceAnchor, target, targetAnchor } = item;
+      //   return {
+      //     source,
+      //     sourceAnchor,
+      //     target,
+      //     targetAnchor
+      //   };
+      // });
 
-      const nodes = data.nodes.map(item => {
-        const { id, x, y, _originId, label, _label, _timeStamp } = item;
-        return {
-          id,
-          label: _label || label,
-          x,
-          y,
-          _originId,
-          _timeStamp
-        };
-      });
+      // const nodes = data.nodes.map(item => {
+      //   const { id, x, y, _originId, label, _label, _timeStamp } = item;
+      //   return {
+      //     id,
+      //     label: _label || label,
+      //     x,
+      //     y,
+      //     _originId,
+      //     _timeStamp
+      //   };
+      // });
 
-      const newData = JSON.stringify({
-        edges,
-        nodes
-      });
+      // const newData = JSON.stringify({
+      //   edges,
+      //   nodes
+      // });
 
-      store.save();
-      this.$emit("save", newData);
+      // store.save();
+      // this.$emit("save", newData);
     }
   }
 };

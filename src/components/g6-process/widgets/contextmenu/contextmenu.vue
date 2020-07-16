@@ -26,6 +26,8 @@ export default {
         return;
       }
 
+      store.exit()
+
       const item = graph.get("_contextMenuSelected");
       console.log(item.getModel());
 

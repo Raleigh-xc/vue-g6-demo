@@ -8,6 +8,7 @@ const defaultConfig = () => {
     maxZoom: 10,
     minZoom: 0.2,
     stackList: [],
+    layoutList:[],
     stackIndex: -1,
     savedIndex: 0,
     maxStack: 20,
@@ -15,7 +16,8 @@ const defaultConfig = () => {
     nodeSelectedList: [],
     edgeSelectedList: [],
     fullScreen: false,
-    graphNodes: []
+    graphNodes: [],
+    saveNodes: []
   }
 }
 
@@ -73,12 +75,28 @@ export default {
 
     const { graph, stackList, stackIndex, maxStack } = this.state
 
+    const data = graph.save()
+    const client = document.querySelector('.graph.myGraph').getBoundingClientRect()
+    const position = graph.getPointByClient(client.x,client.y)
+    const layout = {
+      x: position.x,
+      y: position.y,
+      zoom: graph.getZoom()
+    }
+
+    console.log('layout',layout)
+
+    const graphData = {
+      data,
+      layout
+    }
+
     if (this.state.stackIndex + 1 >= maxStack) {
-      stackList.push(graph.save())
+      stackList.push(graphData)
       stackList.shift()
       this.state.savedIndex--
     } else {
-      this.state.stackList = stackList.slice(0, stackIndex + 1).concat(graph.save())
+      this.state.stackList = stackList.slice(0, stackIndex + 1).concat(graphData)
     }
 
     this.state.stackIndex = this.state.stackList.length - 1
@@ -161,21 +179,29 @@ export default {
     this.state.edgeSelectedList = graph.findAllByState("edge", "selected");
   },
 
+  _changeLayout(layout){
+    console.log(layout.x,layout.y,layout.zoom)
+    const { graph } = this.state
+    graph.zoomTo(layout.zoom);
+    graph.moveTo(layout.x,layout.y)
+    this.state.currentZoom = layout.zoom
+  },
+
   undo () {
     const { graph, stackList, stackIndex } = this.state
-    const data = stackList[stackIndex - 1]
-    graph.read(data);
+    const graphData = stackList[stackIndex - 1]
+    graph.read(graphData.data);
     this.state.stackIndex--
-
+    this._changeLayout(graphData.layout)
     this.updateGraphNodes()
   },
 
   redo () {
     const { graph, stackList, stackIndex } = this.state
-    const data = stackList[stackIndex + 1]
-    graph.read(data);
+    const graphData = stackList[stackIndex + 1]
+    graph.read(graphData.data);
     this.state.stackIndex++
-
+    this._changeLayout(graphData.layout)
     this.updateGraphNodes()
   },
 
@@ -247,7 +273,7 @@ export default {
   },
 
   exit () {
-    document.exitFullscreen()
+    this.state.fullScreen && document.exitFullscreen()
     this.state.fullScreen = false
   },
 
