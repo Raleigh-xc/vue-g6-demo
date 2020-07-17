@@ -55,7 +55,11 @@
 
     <span class="scale">当前比例：{{currentScale}}</span>
 
-    <!-- {{rootState.stackList.length}}/{{rootState.stackIndex}}/{{rootState.savedIndex}} -->
+    <!-- <span class="scale" @click="handleAddStack">[ add stack ]</span>
+    <span class="scale" @click="handleLayout">[ layout ]</span> -->
+
+    <!-- <span class="scale">{{rootState.stackList.length}}/{{rootState.stackIndex}}/{{rootState.savedIndex}}</span> -->
+    <!-- <span class="scale">[x:{{rootState.offsetX}}/y:{{rootState.offsetY}}]</span> -->
 
     <div class="btn-save" :class="{disabled: !hasChange}" @click="handleSave($event)">保存</div>
   </div>
@@ -167,7 +171,7 @@ export default {
         return;
       }
 
-      store.exit()
+      store.exit();
 
       const nodes = graph.findAllByState("node", "selected");
       if (nodes.length === 1) {
@@ -181,44 +185,61 @@ export default {
       }
     },
 
+    handleAddStack() {
+      store.addStack();
+    },
+
+    handleLayout() {
+      const { graph } = this.$parent;
+      const client = document
+        .querySelector(".graph.myGraph")
+        .getBoundingClientRect();
+      const position = graph.getPointByClient(client.x, client.y);
+      // console.log(position.x, position.y);
+      const layout = {
+        // x: this.state.offsetX,
+        // y: this.state.offsetY,
+        x: position.x,
+        y: position.y,
+        zoom: graph.getZoom()
+      };
+
+      console.log("current", layout);
+    },
+
     handleSave() {
-      this.$parent.graph.moveTo(0,0)
-      // const disabled = event.target.classList.contains("disabled");
-      // if (disabled) {
-      //   console.log(`save is disabled`);
-      //   return;
-      // }
-      
-      // const data = this.$parent.graph.save();
-      // const edges = data.edges.map(item => {
-      //   const { source, sourceAnchor, target, targetAnchor } = item;
-      //   return {
-      //     source,
-      //     sourceAnchor,
-      //     target,
-      //     targetAnchor
-      //   };
-      // });
-
-      // const nodes = data.nodes.map(item => {
-      //   const { id, x, y, _originId, label, _label, _timeStamp } = item;
-      //   return {
-      //     id,
-      //     label: _label || label,
-      //     x,
-      //     y,
-      //     _originId,
-      //     _timeStamp
-      //   };
-      // });
-
-      // const newData = JSON.stringify({
-      //   edges,
-      //   nodes
-      // });
-
-      // store.save();
-      // this.$emit("save", newData);
+      const disabled = event.target.classList.contains("disabled");
+      if (disabled) {
+        console.log(`save is disabled`);
+        return;
+      }
+      const data = this.$parent.graph.save();
+      const edges = data.edges.map(item => {
+        const { source, sourceAnchor, target, targetAnchor } = item;
+        return {
+          source,
+          sourceAnchor,
+          target,
+          targetAnchor
+        };
+      });
+      const nodes = data.nodes.map(item => {
+        const { id, x, y, _originId, label, _label, _timeStamp } = item;
+        return {
+          id,
+          label: _label || label,
+          x,
+          y,
+          _originId,
+          _timeStamp
+        };
+      });
+      const newData = JSON.stringify({
+        edges,
+        nodes
+      });
+      store.save();
+      this.$emit("save", newData);
     }
   }
 };

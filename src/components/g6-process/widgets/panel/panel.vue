@@ -52,9 +52,7 @@ export default {
   },
 
   methods: {
-    handleDragStart(item) {
-      console.log(item);
-    },
+    handleDragStart() {},
 
     handleDragEnd(evt, item) {
       const { graph } = store.state;

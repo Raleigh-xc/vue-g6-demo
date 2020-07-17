@@ -60,7 +60,6 @@ export default {
     },
 
     handleSave(data) {
-      console.log(data);
       this.$emit("save", data);
     },
 

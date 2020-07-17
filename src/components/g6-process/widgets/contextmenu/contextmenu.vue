@@ -29,7 +29,6 @@ export default {
       store.exit()
 
       const item = graph.get("_contextMenuSelected");
-      console.log(item.getModel());
 
       const model = item.getModel();
       const data = {
@@ -46,7 +45,6 @@ export default {
       }
 
       const item = graph.get("_contextMenuSelected");
-      console.log(item.getType());
 
       if (!item) {
         return;

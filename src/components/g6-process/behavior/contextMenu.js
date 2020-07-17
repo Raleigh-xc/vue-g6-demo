@@ -77,8 +77,6 @@ export default function (G6) {
       // const offsetY = getElementTop(container)
 
       const position = graph.getClientByPoint(evt.x, evt.y)
-      console.log(evt.x, evt.y)
-      console.log(position)
 
       // console.log(offsetX, offsetY)
 
@@ -123,8 +121,6 @@ export default function (G6) {
       // const offsetY = getElementTop(container)
 
       const position = graph.getClientByPoint(evt.x, evt.y)
-      console.log(evt.x, evt.y)
-      console.log(position)
 
       // console.log(offsetX, offsetY)
 

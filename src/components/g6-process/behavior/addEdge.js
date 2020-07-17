@@ -26,9 +26,9 @@ export default function () {
         return
       }
 
-      if(curNodeId === 'START_NODE' && curNode.getEdges().length > 0){
-        return
-      }
+      // if(curNodeId === 'START_NODE' && curNode.getEdges().length > 0){
+      //   return
+      // }
 
       if (shapeName.includes('anchor')) {
         const node = evt.item.getModel().id;
@@ -80,8 +80,6 @@ export default function () {
     },
 
     onMouseUp(evt) {
-      console.log('onMouseUp', evt)
-
       const self = this;
       const graph = self.graph;
 
@@ -99,12 +97,12 @@ export default function () {
         return
       }
 
-      if(curNodeId === 'END_NODE' && curNode.getEdges().length > 0){
-        graph.removeItem(self._edge);
-        self._addingEdge = false
-        self._edge = null
-        return
-      }
+      // if(curNodeId === 'END_NODE' && curNode.getEdges().length > 0){
+      //   graph.removeItem(self._edge);
+      //   self._addingEdge = false
+      //   self._edge = null
+      //   return
+      // }
 
       if (shapeName.includes('anchor') && self._addingEdge && self._edge) {
         const node = evt.item.getModel().id;

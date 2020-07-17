@@ -34,8 +34,7 @@ export default {
   mounted() {
     setTimeout(() => {
       let data = null;
-      data =
-        '{"edges":[{"source":"1594194008942","sourceAnchor":3,"target":"1594194009842","targetAnchor":1}],"nodes":[{"id":"1594194008942","label":"wow_1","x":180,"y":159,"_originId":1,"_timeStamp":"1594194008942"},{"id":"1594194009842","label":"wow_2","x":80,"y":313,"_originId":2,"_timeStamp":"1594194009842"}]}';
+      data = '{"edges":[{"source":"1594194008942","sourceAnchor":3,"target":"1594194009842","targetAnchor":1}],"nodes":[{"id":"1594194008942","label":"wow_1","x":280,"y":20,"_originId":1,"_timeStamp":"1594194008942"},{"id":"1594194009842","label":"wow_2","x":280,"y":313,"_originId":2,"_timeStamp":"1594194009842"}]}';
       this.$refs.g6process.initData(data);
     }, 1000);
   },

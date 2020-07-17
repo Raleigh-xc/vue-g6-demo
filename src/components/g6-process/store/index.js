@@ -8,7 +8,9 @@ const defaultConfig = () => {
     maxZoom: 10,
     minZoom: 0.2,
     stackList: [],
-    layoutList:[],
+    // layoutList: [],
+    // offsetX: 0,
+    // offsetY: 0,
     stackIndex: -1,
     savedIndex: 0,
     maxStack: 20,
@@ -56,6 +58,32 @@ export default {
     //   this.updateGraphNodes()
     // })
 
+    // let _x = 0;
+    // let _y = 0
+    // let _drag = false
+    // graph.on('canvas:dragstart', e => {
+    //   if (_drag) return
+    //   _drag = true
+    //   _x = e.canvasX
+    //   _y = e.canvasY
+    // })
+
+    // graph.on('canvas:dragend', () => {
+    //   // if (_drag) {
+    //   //   const currentZoom = this.state.currentZoom 
+    //   //   this.state.offsetX = (e.canvasX - _x)/currentZoom + this.state.offsetX
+    //   //   this.state.offsetY = (e.canvasY - _y)/currentZoom + this.state.offsetY
+    //   //   _x = 0;
+    //   //   _y = 0
+    //   //   _drag = false
+    //   // }
+
+    //   const client = document.querySelector('.graph.myGraph').getBoundingClientRect()
+    //   const position = graph.getPointByClient(client.x, client.y)
+
+    //   console.log('canvas:dragend', position.x, position.y)
+    // })
+
 
     window.addEventListener('resize', () => {
       this.changeSize()
@@ -64,10 +92,8 @@ export default {
   },
 
   updateGraphNodes () {
-    // clearTimeout(this.gr)
     const { graph } = this.state
-    const nodes = graph.getNodes();
-    console.log(nodes)
+    const nodes = graph.getNodes()
     this.state.graphNodes = nodes.map(node => node.get('model')._originId)
   },
 
@@ -77,14 +103,14 @@ export default {
 
     const data = graph.save()
     const client = document.querySelector('.graph.myGraph').getBoundingClientRect()
-    const position = graph.getPointByClient(client.x,client.y)
+    const position = graph.getPointByClient(client.x, client.y)
+
+    const zoom = graph.getZoom()
     const layout = {
       x: position.x,
       y: position.y,
-      zoom: graph.getZoom()
+      zoom
     }
-
-    console.log('layout',layout)
 
     const graphData = {
       data,
@@ -179,12 +205,13 @@ export default {
     this.state.edgeSelectedList = graph.findAllByState("edge", "selected");
   },
 
-  _changeLayout(layout){
-    console.log(layout.x,layout.y,layout.zoom)
+  _changeLayout (layout) {
     const { graph } = this.state
     graph.zoomTo(layout.zoom);
-    graph.moveTo(layout.x,layout.y)
     this.state.currentZoom = layout.zoom
+    const client = document.querySelector('.graph.myGraph').getBoundingClientRect()
+    const position = graph.getPointByClient(client.x, client.y)
+    graph.translate((position.x - layout.x) * layout.zoom, (position.x - layout.y) * layout.zoom)
   },
 
   undo () {
@@ -219,7 +246,6 @@ export default {
     });
 
     const edges = edgeSelectedList
-    console.log(edges);
     // 删除选中对的边
     edges.forEach(edge => {
       !edge.destroyed && graph.removeItem(edge);
@@ -255,7 +281,6 @@ export default {
     const { graph } = this.state
     const currentZoom = graph.getZoom();
     this.state.currentZoom = currentZoom
-    console.log(currentZoom)
   },
 
   changeSize () {
@@ -263,7 +288,6 @@ export default {
     const container = window.getComputedStyle(document.querySelector('.graph.myGraph'));
     const height = parseInt(container.height)
     const width = parseInt(container.width)
-    console.log(height, width)
     graph.changeSize(width, height);
   },
 
