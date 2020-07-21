@@ -1,4 +1,6 @@
-export default function (G6) {
+import G6 from '@antv/g6'
+
+export default function () {
   G6.registerBehavior('hover-edge', {
     getEvents() {
       return {

@@ -1,51 +1,6 @@
-// function getElementLeft (element) {
-//   var actualLeft = element.offsetLeft
-//   var current = element.offsetParent
+import G6 from '@antv/g6'
 
-//   while (current !== null) {
-//     actualLeft += current.offsetLeft
-//     current = current.offsetParent
-//   }
-
-//   return actualLeft
-// }
-
-// function getElementTop (element) {
-//   var actualTop = element.offsetTop
-//   var current = element.offsetParent
-
-//   while (current !== null) {
-//     actualTop += current.offsetTop
-//     current = current.offsetParent
-//   }
-
-//   return actualTop
-// }
-
-/**
-  *  @description 获取滚动条滑动的距离
-  *  document.documentElement.scrollTop  | document.body.scrollTop
-  *  document.documentElement.scrollLeft  | document.body.scrollLeft
-  *  IE8 和 IE8 以下的浏览器不兼容
-  *  window.pageYOffset
-  *  window.pageXOffset
-  * @returns {x:0,y:0}
-  */
-// function getScrollOffset () {
-//   if (window.pageXOffset) {
-//     return {
-//       x: window.pageXOffset,
-//       y: window.pageYOffset
-//     }
-//   } else {
-//     return {
-//       x: document.body.scrollLeft + document.documentElement.scrollLeft,
-//       y: document.body.scrollTop + document.documentElement.scrollTop
-//     }
-//   }
-// }
-
-export default function (G6) {
+export default function () {
   G6.registerBehavior('context-menu', {
     getEvents () {
       return {

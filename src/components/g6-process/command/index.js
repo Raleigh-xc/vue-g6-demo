@@ -1,5 +1,3 @@
-// import cloneDeep from 'lodash.clonedeep'
-
 class Command {
   constructor(graph) {
     this.graph = graph
