@@ -101,7 +101,7 @@ export default {
 
     const { graph, stackList, stackIndex, maxStack } = this.state
 
-    const data = graph.save()
+    const data = JSON.parse(JSON.stringify(graph.save()))
     const client = document.querySelector('.graph.myGraph').getBoundingClientRect()
     const position = graph.getPointByClient(client.x, client.y)
 
@@ -217,7 +217,7 @@ export default {
   undo () {
     const { graph, stackList, stackIndex } = this.state
     const graphData = stackList[stackIndex - 1]
-    graph.read(graphData.data);
+    graph.read(JSON.parse(JSON.stringify(graphData.data)));
     this.state.stackIndex--
     this._changeLayout(graphData.layout)
     this.updateGraphNodes()
@@ -226,7 +226,7 @@ export default {
   redo () {
     const { graph, stackList, stackIndex } = this.state
     const graphData = stackList[stackIndex + 1]
-    graph.read(graphData.data);
+    graph.read(JSON.parse(JSON.stringify(graphData.data)));
     this.state.stackIndex++
     this._changeLayout(graphData.layout)
     this.updateGraphNodes()
@@ -284,21 +284,24 @@ export default {
   },
 
   changeSize () {
+    // 更新画布大小
     const { graph } = this.state
-    const container = window.getComputedStyle(document.querySelector('.graph.myGraph'));
-    const height = parseInt(container.height)
-    const width = parseInt(container.width)
+    const graphStyle = window.getComputedStyle(document.querySelector('.graph.myGraph'));
+    const height = parseInt(graphStyle.height)
+    const width = parseInt(graphStyle.width)
     graph.changeSize(width, height);
+
+    // 更新全屏状态
+    const container = window.getComputedStyle(document.querySelector('.g6-process-container'));
+    this.state.fullScreen = parseInt(container.width) === window.screen.width && parseInt(container.height) === window.screen.height
   },
 
   full () {
     document.querySelector(".g6-process-container").requestFullscreen()
-    this.state.fullScreen = true
   },
 
   exit () {
     this.state.fullScreen && document.exitFullscreen()
-    this.state.fullScreen = false
   },
 
   fitView () {

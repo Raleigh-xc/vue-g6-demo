@@ -56,10 +56,9 @@
     <span class="scale">当前比例：{{currentScale}}</span>
 
     <!-- <span class="scale" @click="handleAddStack">[ add stack ]</span>
-    <span class="scale" @click="handleLayout">[ layout ]</span> -->
-
-    <!-- <span class="scale">{{rootState.stackList.length}}/{{rootState.stackIndex}}/{{rootState.savedIndex}}</span> -->
-    <!-- <span class="scale">[x:{{rootState.offsetX}}/y:{{rootState.offsetY}}]</span> -->
+    <span class="scale" @click="handleLayout">[ layout ]</span>
+    <span class="scale" @click="handleShowStack">[ stacks ]</span>
+    <span class="scale">[{{rootState.stackList.length}}/{{rootState.stackIndex}}/{{rootState.savedIndex}}]</span> -->
 
     <div class="btn-save" :class="{disabled: !hasChange}" @click="handleSave($event)">保存</div>
   </div>
@@ -183,6 +182,13 @@ export default {
         };
         this.$emit("edit", target);
       }
+    },
+
+    handleShowStack(){
+      console.log(store.state.stackList)
+      store.state.stackList.forEach((stack,index)=>{
+        console.log(index,stack.data.nodes.map(node=>`${node.x},${node.y}`))
+      })
     },
 
     handleAddStack() {
