@@ -60,6 +60,8 @@ export default {
       const position = graph.getPointByClient(evt.x, evt.y);
       const id = `${Date.now()}`;
       const node = {
+        // type: 'base-node-2',
+        // size: [160, 40],
         id,
         x: position.x,
         y: position.y,

@@ -2,6 +2,48 @@ import G6 from '@antv/g6'
 export default function () {
   G6.registerNode('base-node-2', {
 
+    options: {
+      style: {
+        // size: [160, 40],
+        // radius: 5,
+        // stroke: "red",
+        // fill: "#fff",
+        // lineWidth: 2
+      },
+      stateStyles: {
+        selected: {
+          stroke: "red",
+          "anchor-0": {
+            opacity: 0.5
+          },
+          "anchor-1": {
+            opacity: 1
+          },
+          "anchor-2": {
+            opacity: 1
+          },
+          "anchor-3": {
+            opacity: 1
+          }
+        },
+        hover: {
+          stroke: "red",
+          "anchor-0": {
+            opacity: 0.5
+          },
+          "anchor-1": {
+            opacity: 1
+          },
+          "anchor-2": {
+            opacity: 1
+          },
+          "anchor-3": {
+            opacity: 1
+          }
+        }
+      }
+    },
+
     draw (cfg, group) {
       const size = cfg.size;
       const width = size[0];
@@ -29,7 +71,7 @@ export default function () {
             textBaseline: 'middle',
             text: cfg.label,
             fill: 'red',
-            fontSize: '18'
+            fontSize: 18
           },
           // must be assigned in G6 3.3 and later versions. it can be any value you want
           name: 'text-shape',

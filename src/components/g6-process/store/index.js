@@ -142,6 +142,7 @@ export default {
 
   readData (value) {
     // this.updateLatest(value)
+    console.log(111111)
 
     const { graph } = this.state
     if (value) {
@@ -162,24 +163,24 @@ export default {
       graph.read(data);
       isBeyond && this.fitView()
     } else {
-      // const graphWidth = graph.getWidth()
-      // const graphHeight = graph.getHeight()
-      // const startNode = {
-      //   id: 'START_NODE',
-      //   x: graphWidth / 2 - 240,
-      //   y: graphHeight / 2 - 100,
-      //   label: '开 始',
-      //   type: 'start-node'
-      // }
-      // const endNode = {
-      //   id: 'END_NODE',
-      //   x: graphWidth / 2 + 240,
-      //   y: graphHeight / 2 - 100,
-      //   label: '结 束',
-      //   type: 'end-node'
-      // }
-      // graph.add('node', startNode)
-      // graph.add('node', endNode)
+      const graphWidth = graph.getWidth()
+      const graphHeight = graph.getHeight()
+      const startNode = {
+        id: 'START_NODE',
+        x: graphWidth / 2 - 240,
+        y: graphHeight / 2 - 100,
+        label: '开 始',
+        type: 'start-node'
+      }
+      const endNode = {
+        id: 'END_NODE',
+        x: graphWidth / 2 + 240,
+        y: graphHeight / 2 - 100,
+        label: '结 束',
+        type: 'end-node'
+      }
+      graph.add('node', startNode)
+      graph.add('node', endNode)
     }
     this.addStack()
   },

@@ -36,6 +36,8 @@ export default {
         // type: 'default'
       });
 
+      // debugger
+
       const container = window.getComputedStyle(this.$refs["graph"]);
       const graph = new G6.Graph({
         container: this.$refs["graph"],
@@ -57,7 +59,7 @@ export default {
         },
 
         defaultNode: {
-          type: "base-node",
+          type: "base-node-2",
           size: [160, 40],
           style: {
             radius: 5,
@@ -73,38 +75,38 @@ export default {
           }
         },
 
-        nodeStateStyles: {
-          selected: {
-            stroke: "#5b8ff9",
-            "anchor-0": {
-              opacity: 1
-            },
-            "anchor-1": {
-              opacity: 1
-            },
-            "anchor-2": {
-              opacity: 1
-            },
-            "anchor-3": {
-              opacity: 1
-            }
-          },
-          hover: {
-            stroke: "#5b8ff9",
-            "anchor-0": {
-              opacity: 1
-            },
-            "anchor-1": {
-              opacity: 1
-            },
-            "anchor-2": {
-              opacity: 1
-            },
-            "anchor-3": {
-              opacity: 1
-            }
-          }
-        },
+        // nodeStateStyles: {
+        //   selected: {
+        //     stroke: "#5b8ff9",
+        //     "anchor-0": {
+        //       opacity: 1
+        //     },
+        //     "anchor-1": {
+        //       opacity: 1
+        //     },
+        //     "anchor-2": {
+        //       opacity: 1
+        //     },
+        //     "anchor-3": {
+        //       opacity: 1
+        //     }
+        //   },
+        //   hover: {
+        //     stroke: "#5b8ff9",
+        //     "anchor-0": {
+        //       opacity: 1
+        //     },
+        //     "anchor-1": {
+        //       opacity: 1
+        //     },
+        //     "anchor-2": {
+        //       opacity: 1
+        //     },
+        //     "anchor-3": {
+        //       opacity: 1
+        //     }
+        //   }
+        // },
 
         defaultEdge: {
           style: {
