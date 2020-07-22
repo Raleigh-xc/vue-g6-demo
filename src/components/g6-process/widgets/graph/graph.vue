@@ -32,7 +32,8 @@ export default {
     drawGraph(G6) {
       const grid = new G6.Grid();
       const minimap = new G6.Minimap({
-        size: [150, 100]
+        size: [150, 100],
+        // type: 'default'
       });
 
       const container = window.getComputedStyle(this.$refs["graph"]);

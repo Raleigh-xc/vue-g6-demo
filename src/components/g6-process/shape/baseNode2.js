@@ -1,14 +1,51 @@
 import G6 from '@antv/g6'
 export default function () {
-  G6.registerNode('base-node', {
-    
-    
+  G6.registerNode('base-node-2', {
 
-    afterDraw(cfg, group) {
+    draw (cfg, group) {
+      const size = cfg.size;
+      const width = size[0];
+      const height = size[1];
+
+      const keyShape = group.addShape('rect', {
+        attrs: {
+          x: 0 - width / 2,
+          y: 0 - height / 2,
+          width,
+          height,
+          radius: 5,
+          fill: '#eee',
+          stroke: 'black',
+        },
+        name: 'base-node-keyShape'
+      })
+
+      if (cfg.label) {
+        group.addShape('text', {
+          attrs: {
+            x: 0, // 居中
+            y: 0,
+            textAlign: 'center',
+            textBaseline: 'middle',
+            text: cfg.label,
+            fill: 'red',
+            fontSize: '18'
+          },
+          // must be assigned in G6 3.3 and later versions. it can be any value you want
+          name: 'text-shape',
+          // 设置 draggable 以允许响应鼠标的图拽事件
+          draggable: true
+        });
+      }
+
+      return keyShape
+    },
+
+    afterDraw (cfg, group) {
       this._drawAnchor(cfg, group)
     },
 
-    _drawAnchor(cfg, group) {
+    _drawAnchor (cfg, group) {
       const size = cfg.size;
       const width = size[0];
       const height = size[1];
@@ -70,7 +107,7 @@ export default function () {
       });
     },
 
-    getAnchorPoints() {
+    getAnchorPoints () {
       return [
         [0, 0.5], // 左侧中间
         [0.5, 0],
@@ -129,5 +166,5 @@ export default function () {
     //   }
     // },
 
-  }, 'rect')
+  }, 'single-node')
 }

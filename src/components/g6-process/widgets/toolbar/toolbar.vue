@@ -55,10 +55,11 @@
 
     <span class="scale">当前比例：{{currentScale}}</span>
 
-    <!-- <span class="scale" @click="handleAddStack">[ add stack ]</span>
+    <span class="scale">[{{rootState.stackList.length}}/{{rootState.stackIndex}}/{{rootState.savedIndex}}]</span>
+    <span class="scale" @click="handleAddStack">[ add stack ]</span>
     <span class="scale" @click="handleLayout">[ layout ]</span>
     <span class="scale" @click="handleShowStack">[ stacks ]</span>
-    <span class="scale">[{{rootState.stackList.length}}/{{rootState.stackIndex}}/{{rootState.savedIndex}}]</span> -->
+    <span class="scale" @click="handleGraphSave">[ save ]</span>
 
     <div class="btn-save" :class="{disabled: !hasChange}" @click="handleSave($event)">保存</div>
   </div>
@@ -211,6 +212,10 @@ export default {
       };
 
       console.log("current", layout);
+    },
+
+    handleGraphSave(){
+      console.log('handleGraphSave',this.$parent.graph.save())
     },
 
     handleSave() {
